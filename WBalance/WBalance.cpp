@@ -2446,13 +2446,13 @@ void WBalance::btnSaveClicked()
 	{
 		QFileInfo fileInfo(glist_path);
 		QString directory1 = fileInfo.absolutePath();
-		savePath = directory1 + "/" + "输出报告结果" + b_number_8 + ".docx";
+		savePath = directory1 + "/" + "MCM方法-输出报告结果" + b_number_8 + ".docx";
 	}
 	else
 	{
 		QFileInfo fileInfo(templatePath);
 		QString directory2 = fileInfo.absolutePath();
-		savePath = directory2 + "/" + "输出报告结果" + b_number_8 + ".docx";
+		savePath = directory2 + "/" + "MCM方法-输出报告结果" + b_number_8 + ".docx";
 	}
 	qDebug() << savePath;
 
