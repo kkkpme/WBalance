@@ -74,7 +74,7 @@ public:
     bool save_coeff_file(const QString& path, const MatrixXd& data, const QString& title, const QStringList& headers);
 
     QString read_data00();
-    double ThirdRule(double data);
+    QString ThirdRule(double data);
 
     void read_load01_data();
     void read_data01_data();
@@ -88,12 +88,6 @@ public:
     void insertTextByBookmark(QAxObject* document, const QString& bookmarkName, const QString& text);
     bool isNumeric(const QString& str);
     bool isFileLocked(const QString& filePath);
-
-
-    int dbu;
-
-    int d22u;
-    int d23u;
 
 private:
     Ui::WBalanceClass ui;
@@ -125,7 +119,5 @@ private slots:
     void save_comprehen_cfx();    //重复性-结果保存
 
     void btnSaveClicked();        //输出报告
-
-
 };
 
