@@ -74,7 +74,7 @@ public:
     bool save_coeff_file(const QString& path, const MatrixXd& data, const QString& title, const QStringList& headers);
 
     QString read_data00();
-    double ThirdRule(double data);
+    QString ThirdRule(double data);
 
     void read_load01_data();
     void read_data01_data();

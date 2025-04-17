@@ -1344,33 +1344,46 @@ QString WBalance::read_data00()
 	return filePath;
 }
 
-double WBalance::ThirdRule(double input)
+QString WBalance::ThirdRule(double input)
 {
+	//0 特殊处理
+	if (input == 0.0)
+		return QStringLiteral("0.00");
+
 	bool isNegative = input < 0.0;
-	double absVal = std::fabs(input);
+	double absVal = fabs(input);
 
-	//1) 先截断到 3 位小数
-	double truncated = std::floor(absVal * 1000.0) / 1000.0;
+	//1) 计算数量级 exponent（input≈ m × 10^exponent，m∈[1,10)）
+	int exponent = static_cast<int>(floor(log10(absVal)));
 
-	//2) 计算 value_2 = 原始值 - truncated
-	double value_2 = absVal - truncated;
+	//2) 计算保留 3 位有效数字时的“基本单位” scale = 10^(exponent-2)
+	//（这样 m×10^exponent / scale = m×10^2，即保留 3 位整数 m×10^2）
+	double scale = pow(10.0, exponent - 2);
 
-	//3) 固定 value_1 = 0.001
-	const double value_1 = 0.001;
+	//3) 截断到 3 位有效数字：truncatedMultiple = ⌊absVal/scale⌋
+	double truncatedMultiple = floor(absVal / scale);
+	double truncatedValue = truncatedMultiple * scale;
 
-	//4) 计算 value_3 = value_1 / 3
-	const double value_3 = value_1 / 3.0; // ≈ 0.0003333333
+	//4) 计算剩余 value_2
+	double value_2 = absVal - truncatedValue;
 
-	//5) 决定是否进位
-	double result = truncated;
+	//5) “三分之一准则”：value_1=scale, value_3=scale/3
+	double value_1 = scale;
+	double value_3 = value_1 / 3.0;
 	if (value_2 >= value_3) 
 	{
-		result += value_1;
+		truncatedMultiple += 1.0;
+		truncatedValue = truncatedMultiple * scale;
 	}
 
-	//恢复符号
-	if (isNegative) result = -result;
-	return result;
+	//6) 恢复符号
+	double result = isNegative ? -truncatedValue : truncatedValue;
+	//重新计算 exponent
+	int exponent_2 = static_cast<int>(floor(log10(fabs(result))));
+	//小数位数 = max(0, 2 - exponent)
+	int decimals = qMax(0, 2 - exponent_2);
+	//'f' 保证补 0
+	return QString::number(result, 'f', decimals);
 }
 
 void WBalance::show_data00()
@@ -1485,12 +1498,12 @@ void WBalance::compute_repeat_result()
 		for (int col = 0; col < header.size(); ++col) 
 		{
 			//三分之一准则
-			double value = ThirdRule(cfx_result[col].stddev);
+			QString value = ThirdRule(cfx_result[col].stddev);
 
-			QStandardItem* originalItem = new QStandardItem(QString::number(value));
+			QStandardItem* originalItem = new QStandardItem(value);
 			model_2->setItem(0, col, originalItem);
 
-			QString value_2 = QString("%1").arg(2.0 * value, 0, 'f', 3); //k=2
+			QString value_2 = ThirdRule(2.0 * cfx_result[col].stddev); //k=2
 			QStandardItem* uncertaintyItem = new QStandardItem(value_2);
 			model_2->setItem(1, col, uncertaintyItem);
 		}
