@@ -64,7 +64,7 @@
     <IncludePath>E:\Application\Eigen\eigen-3.4.0;E:\QT\QTanzhuangdaoci\5.14.2\msvc2017_64\bin</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x64'">
-    <IncludePath>E:\Application\Eigen\eigen-3.4.0;E:\QT\QTanzhuangdaoci\5.14.2\msvc2017_64\bin</IncludePath>
+    <IncludePath>D:\software\Eigen\eigen-3.4.0;D:\software\qt\5.14.2\msvc2017_64</IncludePath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <Link>
@@ -106,7 +106,7 @@
       <Optimization>MaxSpeed</Optimization>
     </ClCompile>
     <Link>
-      <SubSystem>Windows</SubSystem>
+      <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
     </Link>
   </ItemDefinitionGroup>

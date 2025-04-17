@@ -2000,6 +2000,42 @@ void WBalance::compute_comprehen()
 	if (isChecked_method1 == 1)
 	{
 		vector<double> method1_result = A2244(filePath_data01, filePath_load01, filePath_coff);
+
+		auto save_third_nums = [](double input)
+		{
+			bool isNegative = input < 0.0;
+			double absVal = std::fabs(input);
+
+			//1) 先截断到 3 位小数
+			double truncated = std::floor(absVal * 1000.0) / 1000.0;
+
+			//2) 计算 value_2 = 原始值 - truncated
+			double value_2 = absVal - truncated;
+
+			//3) 固定 value_1 = 0.001
+			const double value_1 = 0.001;
+
+			//4) 计算 value_3 = value_1 / 3
+			const double value_3 = value_1 / 3.0; // ≈ 0.0003333333
+
+			//5) 决定是否进位
+			double result = truncated;
+			if (value_2 >= value_3)
+			{
+				result += value_1;
+			}
+
+			//恢复符号
+			if (isNegative) result = -result;
+			return result;
+		};
+
+		vector<double> method1_result_new;
+		for (auto& it : method1_result)
+		{
+			method1_result_new.push_back(save_third_nums(it));
+		}
+
 		if (method1_result.empty())
 		{
 			qDebug() << "method1_result is empty!";
@@ -2015,12 +2051,12 @@ void WBalance::compute_comprehen()
 			{
 				if (i == 0)
 				{
-					QStandardItem* item1 = new QStandardItem(QString::number(method1_result[j]));
+					QStandardItem* item1 = new QStandardItem(QString::number(method1_result_new[j]));
 					model1->setItem(i, j, item1);
 				}
 				else if (i == 1)
 				{
-					QStandardItem* item1 = new QStandardItem(QString::number(2 * method1_result[j]));
+					QStandardItem* item1 = new QStandardItem(QString::number(2 * method1_result_new[j]));
 					model1->setItem(i, j, item1);
 				}
 			}
@@ -2034,10 +2070,10 @@ void WBalance::compute_comprehen()
 		MatrixXd result_66 = compute_66_matrix(filePath_data01, filePath_load01, filePath_coff);
 
 		//表头加"K_"
-		QStringList header1 = header;
-		header1.replaceInStrings(QRegularExpression("^"), "K_");
+		//QStringList header1 = header;
+		//header1.replaceInStrings(QRegularExpression("^"), "K_");
 		QStandardItemModel* model2 = new QStandardItemModel();
-		model2->setHorizontalHeaderLabels(header1);
+		model2->setHorizontalHeaderLabels(header);
 
 		//加"Δ"
 		QStringList header2 = header;
@@ -2076,7 +2112,9 @@ void WBalance::save_comprehen()
 	if (filePath.isEmpty())//如果前面没有路径，就重新选择路径（独立使用时）
 	{
 		QFileInfo fileInfo(ui.lineEdit_coff_path_2->text());
-		QString saveFilePath = QFileDialog::getSaveFileName(this, tr("选择文件"), fileInfo.absolutePath(), ("*.txt"));
+		//QString saveFilePath = QFileDialog::getSaveFileName(this, tr("选择文件"), fileInfo.absolutePath(), ("*.txt"));
+		QString saveFilePath = fileInfo.absolutePath() + "/" + tr("综合加载误差不同工况输出结果.txt");
+		qDebug() << saveFilePath;
 		if (saveFilePath.isEmpty())
 		{
 			QMessageBox::critical(this, tr("错误！"), tr("请选择保存路径！"));
@@ -2102,15 +2140,15 @@ void WBalance::save_comprehen()
 			}
 
 			QString content;
-			content += "\t" + horizontalHeaders.join("\t\t") + "\n"; // 添加水平表头
+			content += "       " + horizontalHeaders.join("       ") + "\n"; // 添加水平表头
 
 			for (int row = 0; row < rowCount; ++row)
 			{
-				content += verticalHeaders[row] + "\t"; // 添加垂直表头
+				content += verticalHeaders[row] + "       "; // 添加垂直表头
 				for (int col = 0; col < colCount; ++col) 
 				{
 					QModelIndex index = model->index(row, col);
-					content += model->data(index).toString() + "\t";
+					content += model->data(index).toString() + "       ";
 				}
 				content += "\n";
 			}
@@ -2153,15 +2191,15 @@ void WBalance::save_comprehen()
 				}
 
 				QString content1;
-				content1 += "\t" + horizontalHeaders1.join("\t\t") + "\n"; // 添加水平表头
+				content1 += "       " + horizontalHeaders1.join("       ") + "\n"; // 添加水平表头
 
 				for (int row = 0; row < rowCount; ++row)
 				{
-					content1 += verticalHeaders1[row] + "\t"; // 添加垂直表头
+					content1 += verticalHeaders1[row] + "       "; // 添加垂直表头
 					for (int col = 0; col < colCount; ++col) 
 					{
 						QModelIndex index = model1->index(row, col);
-						content1 += model1->data(index).toString() + "\t";
+						content1 += model1->data(index).toString() + "       ";
 					}
 					content1 += "\n";
 				}
@@ -2204,14 +2242,14 @@ void WBalance::save_comprehen()
 				}
 
 				QString content2;
-				content2 += "\t" + horizontalHeaders2.join("\t\t") + "\n"; // 添加水平表头
+				content2 += "       " + horizontalHeaders2.join("       ") + "\n"; // 添加水平表头
 
 				for (int row = 0; row < rowCount; ++row)
 				{
-					content2 += verticalHeaders2[row] + "\t"; // 添加垂直表头
+					content2 += verticalHeaders2[row] + "       "; // 添加垂直表头
 					for (int col = 0; col < colCount; ++col) {
 						QModelIndex index = model2->index(row, col);
-						content2 += model2->data(index).toString() + "\t";
+						content2 += model2->data(index).toString() + "       ";
 					}
 					content2 += "\n";
 				}
@@ -2236,7 +2274,8 @@ void WBalance::save_comprehen()
 	{
 		QFileInfo fileInfo(filePath);
 		QString directory = fileInfo.absolutePath();
-		QString saveFilePath = QFileDialog::getSaveFileName(this, tr("保存文件"), directory, ("*.txt"));
+		//QString saveFilePath = QFileDialog::getSaveFileName(this, tr("保存文件"), directory, ("*.txt"));
+		QString saveFilePath = directory + "/" + "综合加载误差不同工况输出结果.txt";
 		if (saveFilePath.isEmpty())
 		{
 			QMessageBox::critical(this, tr("错误！"), tr("未找到文件路径！"));
@@ -2262,14 +2301,14 @@ void WBalance::save_comprehen()
 			}
 
 			QString content;
-			content += "\t" + horizontalHeaders.join("\t\t") + "\n"; // 添加水平表头
+			content += "       " + horizontalHeaders.join("       ") + "\n"; // 添加水平表头
 
 			for (int row = 0; row < rowCount; ++row)
 			{
-				content += verticalHeaders[row] + "\t"; // 添加垂直表头
+				content += verticalHeaders[row] + "       "; // 添加垂直表头
 				for (int col = 0; col < colCount; ++col) {
 					QModelIndex index = model->index(row, col);
-					content += model->data(index).toString() + "\t";
+					content += model->data(index).toString() + "       ";
 				}
 				content += "\n";
 			}
@@ -2311,14 +2350,14 @@ void WBalance::save_comprehen()
 				}
 
 				QString content1;
-				content1 += "\t" + horizontalHeaders1.join("\t\t") + "\n"; // 添加水平表头
+				content1 += "       " + horizontalHeaders1.join("       ") + "\n"; // 添加水平表头
 
 				for (int row = 0; row < rowCount; ++row)
 				{
-					content1 += verticalHeaders1[row] + "\t"; // 添加垂直表头
+					content1 += verticalHeaders1[row] + "       "; // 添加垂直表头
 					for (int col = 0; col < colCount; ++col) {
 						QModelIndex index = model1->index(row, col);
-						content1 += model1->data(index).toString() + "\t";
+						content1 += model1->data(index).toString() + "       ";
 					}
 					content1 += "\n";
 				}
@@ -2360,14 +2399,14 @@ void WBalance::save_comprehen()
 				}
 
 				QString content2;
-				content2 += "\t" + horizontalHeaders2.join("\t\t") + "\n"; // 添加水平表头
+				content2 += "       " + horizontalHeaders2.join("       ") + "\n"; // 添加水平表头
 
 				for (int row = 0; row < rowCount; ++row)
 				{
-					content2 += verticalHeaders2[row] + "\t"; // 添加垂直表头
+					content2 += verticalHeaders2[row] + "       "; // 添加垂直表头
 					for (int col = 0; col < colCount; ++col) {
 						QModelIndex index = model2->index(row, col);
-						content2 += model2->data(index).toString() + "\t";
+						content2 += model2->data(index).toString() + "       ";
 					}
 					content2 += "\n";
 				}
