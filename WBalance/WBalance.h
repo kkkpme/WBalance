@@ -89,6 +89,12 @@ public:
     bool isNumeric(const QString& str);
     bool isFileLocked(const QString& filePath);
 
+
+    int dbu;
+
+    int d22u;
+    int d23u;
+
 private:
     Ui::WBalanceClass ui;
 
@@ -119,5 +125,7 @@ private slots:
     void save_comprehen_cfx();    //重复性-结果保存
 
     void btnSaveClicked();        //输出报告
+
+
 };
 
