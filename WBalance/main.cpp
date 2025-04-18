@@ -9,6 +9,9 @@ int main(int argc, char *argv[])
 {
     QApplication a(argc, argv);
 
+    //注册 Eigen::MatrixXd
+    qRegisterMetaType<Eigen::MatrixXd>("Eigen::MatrixXd");
+
     //加载启动图片
     QString imagePath = QCoreApplication::applicationDirPath() + "/MCM_welcome.jpg";
     QPixmap pixmap(imagePath); 
@@ -29,7 +32,7 @@ int main(int argc, char *argv[])
 
     WBalance w;
 
-    //跨平台延时（非阻塞，推荐）
+    //跨平台延时（非阻塞）
     QTimer::singleShot(2000, [&]() {
         splash.close();      //关闭欢迎界面
         w.show();            //显示主窗口

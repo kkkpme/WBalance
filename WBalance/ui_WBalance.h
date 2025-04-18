@@ -1,13 +1,13 @@
 /********************************************************************************
-** Form generated from reading UI file 'WBalanceRHWrrh.ui'
+** Form generated from reading UI file 'WBalancehUojgS.ui'
 **
 ** Created by: Qt User Interface Compiler version 5.14.2
 **
 ** WARNING! All changes made in this file will be lost when recompiling UI file!
 ********************************************************************************/
 
-#ifndef WBALANCERHWRRH_H
-#define WBALANCERHWRRH_H
+#ifndef WBALANCEHUOJGS_H
+#define WBALANCEHUOJGS_H
 
 #include <QtCore/QVariant>
 #include <QtWidgets/QAction>
@@ -146,6 +146,11 @@ public:
     QLineEdit *lineEdit_data00_path;
     QPushButton *pushButton_show_data00;
     QPushButton *pushButton_read_coff_00;
+    QLabel *label_87;
+    QLineEdit *lineEdit_load00_path;
+    QPushButton *pushButton_read_load_00;
+    QGroupBox *groupBox_15;
+    QTableView *tableView_show_load00;
     QWidget *page_4;
     QLineEdit *lineEdit_b_instru_9;
     QPushButton *pushButton_save00_result;
@@ -384,7 +389,7 @@ public:
         lineEdit_b_person->setFont(font2);
         label_22 = new QLabel(page_1);
         label_22->setObjectName(QString::fromUtf8("label_22"));
-        label_22->setGeometry(QRect(0, 0, 101, 31));
+        label_22->setGeometry(QRect(0, 0, 261, 31));
         QFont font4;
         font4.setPointSize(11);
         font4.setBold(true);
@@ -684,7 +689,7 @@ public:
         label_20->setFont(font);
         label_26 = new QLabel(page_3);
         label_26->setObjectName(QString::fromUtf8("label_26"));
-        label_26->setGeometry(QRect(0, 0, 101, 31));
+        label_26->setGeometry(QRect(0, 0, 251, 31));
         label_26->setFont(font4);
         label_15 = new QLabel(page_3);
         label_15->setObjectName(QString::fromUtf8("label_15"));
@@ -966,7 +971,7 @@ public:
         label_126->setFont(font4);
         label_85 = new QLabel(page);
         label_85->setObjectName(QString::fromUtf8("label_85"));
-        label_85->setGeometry(QRect(30, 160, 271, 31));
+        label_85->setGeometry(QRect(680, 160, 271, 31));
         QPalette palette37;
         palette37.setBrush(QPalette::Active, QPalette::WindowText, brush1);
         palette37.setBrush(QPalette::Inactive, QPalette::WindowText, brush1);
@@ -1092,7 +1097,7 @@ public:
         label_133->setFont(font);
         groupBox_14 = new QGroupBox(page);
         groupBox_14->setObjectName(QString::fromUtf8("groupBox_14"));
-        groupBox_14->setGeometry(QRect(20, 240, 1251, 441));
+        groupBox_14->setGeometry(QRect(670, 240, 601, 441));
         QPalette palette45;
         palette45.setBrush(QPalette::Active, QPalette::WindowText, brush4);
         palette45.setBrush(QPalette::Active, QPalette::Text, brush3);
@@ -1115,7 +1120,7 @@ public:
         groupBox_14->setAlignment(Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter);
         tableView_show_data00 = new QTableView(groupBox_14);
         tableView_show_data00->setObjectName(QString::fromUtf8("tableView_show_data00"));
-        tableView_show_data00->setGeometry(QRect(10, 30, 1231, 401));
+        tableView_show_data00->setGeometry(QRect(10, 30, 581, 401));
         lineEdit_b_instru_6 = new QLineEdit(page);
         lineEdit_b_instru_6->setObjectName(QString::fromUtf8("lineEdit_b_instru_6"));
         lineEdit_b_instru_6->setGeometry(QRect(580, 40, 151, 31));
@@ -1125,7 +1130,7 @@ public:
         lineEdit_b_instru_6->setReadOnly(true);
         lineEdit_data00_path = new QLineEdit(page);
         lineEdit_data00_path->setObjectName(QString::fromUtf8("lineEdit_data00_path"));
-        lineEdit_data00_path->setGeometry(QRect(30, 190, 1131, 35));
+        lineEdit_data00_path->setGeometry(QRect(680, 190, 481, 35));
         lineEdit_data00_path->setMinimumSize(QSize(0, 26));
         lineEdit_data00_path->setMaximumSize(QSize(16777215, 100));
         lineEdit_data00_path->setFont(font2);
@@ -1180,6 +1185,75 @@ public:
 #endif
         pushButton_read_coff_00->setPalette(palette47);
         pushButton_read_coff_00->setFont(font);
+        label_87 = new QLabel(page);
+        label_87->setObjectName(QString::fromUtf8("label_87"));
+        label_87->setGeometry(QRect(30, 160, 271, 31));
+        QPalette palette48;
+        palette48.setBrush(QPalette::Active, QPalette::WindowText, brush1);
+        palette48.setBrush(QPalette::Inactive, QPalette::WindowText, brush1);
+        palette48.setBrush(QPalette::Disabled, QPalette::WindowText, brush2);
+        label_87->setPalette(palette48);
+        label_87->setFont(font3);
+        lineEdit_load00_path = new QLineEdit(page);
+        lineEdit_load00_path->setObjectName(QString::fromUtf8("lineEdit_load00_path"));
+        lineEdit_load00_path->setGeometry(QRect(30, 190, 481, 35));
+        lineEdit_load00_path->setMinimumSize(QSize(0, 26));
+        lineEdit_load00_path->setMaximumSize(QSize(16777215, 100));
+        lineEdit_load00_path->setFont(font2);
+        pushButton_read_load_00 = new QPushButton(page);
+        pushButton_read_load_00->setObjectName(QString::fromUtf8("pushButton_read_load_00"));
+        pushButton_read_load_00->setGeometry(QRect(520, 190, 91, 35));
+        sizePolicy2.setHeightForWidth(pushButton_read_load_00->sizePolicy().hasHeightForWidth());
+        pushButton_read_load_00->setSizePolicy(sizePolicy2);
+        pushButton_read_load_00->setMinimumSize(QSize(0, 0));
+        pushButton_read_load_00->setMaximumSize(QSize(200, 100));
+        QPalette palette49;
+        palette49.setBrush(QPalette::Active, QPalette::WindowText, brush3);
+        palette49.setBrush(QPalette::Active, QPalette::Text, brush3);
+        palette49.setBrush(QPalette::Active, QPalette::ButtonText, brush4);
+#if QT_VERSION >= QT_VERSION_CHECK(5, 12, 0)
+        palette49.setBrush(QPalette::Active, QPalette::PlaceholderText, brush5);
+#endif
+        palette49.setBrush(QPalette::Inactive, QPalette::WindowText, brush3);
+        palette49.setBrush(QPalette::Inactive, QPalette::Text, brush3);
+        palette49.setBrush(QPalette::Inactive, QPalette::ButtonText, brush4);
+#if QT_VERSION >= QT_VERSION_CHECK(5, 12, 0)
+        palette49.setBrush(QPalette::Inactive, QPalette::PlaceholderText, brush5);
+#endif
+        palette49.setBrush(QPalette::Disabled, QPalette::WindowText, brush2);
+        palette49.setBrush(QPalette::Disabled, QPalette::Text, brush2);
+        palette49.setBrush(QPalette::Disabled, QPalette::ButtonText, brush2);
+#if QT_VERSION >= QT_VERSION_CHECK(5, 12, 0)
+        palette49.setBrush(QPalette::Disabled, QPalette::PlaceholderText, brush6);
+#endif
+        pushButton_read_load_00->setPalette(palette49);
+        pushButton_read_load_00->setFont(font);
+        groupBox_15 = new QGroupBox(page);
+        groupBox_15->setObjectName(QString::fromUtf8("groupBox_15"));
+        groupBox_15->setGeometry(QRect(20, 240, 601, 441));
+        QPalette palette50;
+        palette50.setBrush(QPalette::Active, QPalette::WindowText, brush4);
+        palette50.setBrush(QPalette::Active, QPalette::Text, brush3);
+#if QT_VERSION >= QT_VERSION_CHECK(5, 12, 0)
+        palette50.setBrush(QPalette::Active, QPalette::PlaceholderText, brush6);
+#endif
+        palette50.setBrush(QPalette::Inactive, QPalette::WindowText, brush4);
+        palette50.setBrush(QPalette::Inactive, QPalette::Text, brush3);
+#if QT_VERSION >= QT_VERSION_CHECK(5, 12, 0)
+        palette50.setBrush(QPalette::Inactive, QPalette::PlaceholderText, brush6);
+#endif
+        palette50.setBrush(QPalette::Disabled, QPalette::WindowText, brush2);
+        palette50.setBrush(QPalette::Disabled, QPalette::Text, brush2);
+#if QT_VERSION >= QT_VERSION_CHECK(5, 12, 0)
+        palette50.setBrush(QPalette::Disabled, QPalette::PlaceholderText, brush6);
+#endif
+        groupBox_15->setPalette(palette50);
+        groupBox_15->setFont(font5);
+        groupBox_15->setLayoutDirection(Qt::LeftToRight);
+        groupBox_15->setAlignment(Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter);
+        tableView_show_load00 = new QTableView(groupBox_15);
+        tableView_show_load00->setObjectName(QString::fromUtf8("tableView_show_load00"));
+        tableView_show_load00->setGeometry(QRect(10, 30, 581, 401));
         stackedWidget->addWidget(page);
         page_4 = new QWidget();
         page_4->setObjectName(QString::fromUtf8("page_4"));
@@ -1193,20 +1267,20 @@ public:
         pushButton_save00_result = new QPushButton(page_4);
         pushButton_save00_result->setObjectName(QString::fromUtf8("pushButton_save00_result"));
         pushButton_save00_result->setGeometry(QRect(680, 690, 90, 35));
-        QPalette palette48;
-        palette48.setBrush(QPalette::Active, QPalette::ButtonText, brush4);
-        palette48.setBrush(QPalette::Inactive, QPalette::ButtonText, brush4);
-        palette48.setBrush(QPalette::Disabled, QPalette::ButtonText, brush2);
-        pushButton_save00_result->setPalette(palette48);
+        QPalette palette51;
+        palette51.setBrush(QPalette::Active, QPalette::ButtonText, brush4);
+        palette51.setBrush(QPalette::Inactive, QPalette::ButtonText, brush4);
+        palette51.setBrush(QPalette::Disabled, QPalette::ButtonText, brush2);
+        pushButton_save00_result->setPalette(palette51);
         pushButton_save00_result->setFont(font5);
         label_134 = new QLabel(page_4);
         label_134->setObjectName(QString::fromUtf8("label_134"));
         label_134->setGeometry(QRect(1020, 40, 81, 31));
-        QPalette palette49;
-        palette49.setBrush(QPalette::Active, QPalette::WindowText, brush3);
-        palette49.setBrush(QPalette::Inactive, QPalette::WindowText, brush3);
-        palette49.setBrush(QPalette::Disabled, QPalette::WindowText, brush2);
-        label_134->setPalette(palette49);
+        QPalette palette52;
+        palette52.setBrush(QPalette::Active, QPalette::WindowText, brush3);
+        palette52.setBrush(QPalette::Inactive, QPalette::WindowText, brush3);
+        palette52.setBrush(QPalette::Disabled, QPalette::WindowText, brush2);
+        label_134->setPalette(palette52);
         label_134->setFont(font);
         lineEdit_b_name_9 = new QLineEdit(page_4);
         lineEdit_b_name_9->setObjectName(QString::fromUtf8("lineEdit_b_name_9"));
@@ -1225,11 +1299,11 @@ public:
         pushButton_compute00_result = new QPushButton(page_4);
         pushButton_compute00_result->setObjectName(QString::fromUtf8("pushButton_compute00_result"));
         pushButton_compute00_result->setGeometry(QRect(530, 690, 90, 35));
-        QPalette palette50;
-        palette50.setBrush(QPalette::Active, QPalette::ButtonText, brush4);
-        palette50.setBrush(QPalette::Inactive, QPalette::ButtonText, brush4);
-        palette50.setBrush(QPalette::Disabled, QPalette::ButtonText, brush2);
-        pushButton_compute00_result->setPalette(palette50);
+        QPalette palette53;
+        palette53.setBrush(QPalette::Active, QPalette::ButtonText, brush4);
+        palette53.setBrush(QPalette::Inactive, QPalette::ButtonText, brush4);
+        palette53.setBrush(QPalette::Disabled, QPalette::ButtonText, brush2);
+        pushButton_compute00_result->setPalette(palette53);
         pushButton_compute00_result->setFont(font);
         lineEdit_b_type_9 = new QLineEdit(page_4);
         lineEdit_b_type_9->setObjectName(QString::fromUtf8("lineEdit_b_type_9"));
@@ -1242,11 +1316,11 @@ public:
         groupBox_29 = new QGroupBox(page_4);
         groupBox_29->setObjectName(QString::fromUtf8("groupBox_29"));
         groupBox_29->setGeometry(QRect(20, 480, 1251, 201));
-        QPalette palette51;
-        palette51.setBrush(QPalette::Active, QPalette::WindowText, brush4);
-        palette51.setBrush(QPalette::Inactive, QPalette::WindowText, brush4);
-        palette51.setBrush(QPalette::Disabled, QPalette::WindowText, brush2);
-        groupBox_29->setPalette(palette51);
+        QPalette palette54;
+        palette54.setBrush(QPalette::Active, QPalette::WindowText, brush4);
+        palette54.setBrush(QPalette::Inactive, QPalette::WindowText, brush4);
+        palette54.setBrush(QPalette::Disabled, QPalette::WindowText, brush2);
+        groupBox_29->setPalette(palette54);
         groupBox_29->setFont(font5);
         groupBox_29->setLayoutDirection(Qt::LeftToRight);
         groupBox_29->setAlignment(Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter);
@@ -1258,29 +1332,29 @@ public:
         label_131 = new QLabel(page_4);
         label_131->setObjectName(QString::fromUtf8("label_131"));
         label_131->setGeometry(QRect(760, 40, 81, 31));
-        QPalette palette52;
-        palette52.setBrush(QPalette::Active, QPalette::WindowText, brush3);
-        palette52.setBrush(QPalette::Inactive, QPalette::WindowText, brush3);
-        palette52.setBrush(QPalette::Disabled, QPalette::WindowText, brush2);
-        label_131->setPalette(palette52);
+        QPalette palette55;
+        palette55.setBrush(QPalette::Active, QPalette::WindowText, brush3);
+        palette55.setBrush(QPalette::Inactive, QPalette::WindowText, brush3);
+        palette55.setBrush(QPalette::Disabled, QPalette::WindowText, brush2);
+        label_131->setPalette(palette55);
         label_131->setFont(font);
         label_135 = new QLabel(page_4);
         label_135->setObjectName(QString::fromUtf8("label_135"));
         label_135->setGeometry(QRect(500, 40, 81, 31));
-        QPalette palette53;
-        palette53.setBrush(QPalette::Active, QPalette::WindowText, brush3);
-        palette53.setBrush(QPalette::Inactive, QPalette::WindowText, brush3);
-        palette53.setBrush(QPalette::Disabled, QPalette::WindowText, brush2);
-        label_135->setPalette(palette53);
+        QPalette palette56;
+        palette56.setBrush(QPalette::Active, QPalette::WindowText, brush3);
+        palette56.setBrush(QPalette::Inactive, QPalette::WindowText, brush3);
+        palette56.setBrush(QPalette::Disabled, QPalette::WindowText, brush2);
+        label_135->setPalette(palette56);
         label_135->setFont(font);
         groupBox_30 = new QGroupBox(page_4);
         groupBox_30->setObjectName(QString::fromUtf8("groupBox_30"));
         groupBox_30->setGeometry(QRect(20, 100, 1251, 361));
-        QPalette palette54;
-        palette54.setBrush(QPalette::Active, QPalette::WindowText, brush4);
-        palette54.setBrush(QPalette::Inactive, QPalette::WindowText, brush4);
-        palette54.setBrush(QPalette::Disabled, QPalette::WindowText, brush2);
-        groupBox_30->setPalette(palette54);
+        QPalette palette57;
+        palette57.setBrush(QPalette::Active, QPalette::WindowText, brush4);
+        palette57.setBrush(QPalette::Inactive, QPalette::WindowText, brush4);
+        palette57.setBrush(QPalette::Disabled, QPalette::WindowText, brush2);
+        groupBox_30->setPalette(palette57);
         groupBox_30->setFont(font5);
         groupBox_30->setLayoutDirection(Qt::LeftToRight);
         groupBox_30->setAlignment(Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter);
@@ -1299,20 +1373,20 @@ public:
         label_136 = new QLabel(page_4);
         label_136->setObjectName(QString::fromUtf8("label_136"));
         label_136->setGeometry(QRect(30, 40, 81, 31));
-        QPalette palette55;
-        palette55.setBrush(QPalette::Active, QPalette::WindowText, brush3);
-        palette55.setBrush(QPalette::Inactive, QPalette::WindowText, brush3);
-        palette55.setBrush(QPalette::Disabled, QPalette::WindowText, brush2);
-        label_136->setPalette(palette55);
+        QPalette palette58;
+        palette58.setBrush(QPalette::Active, QPalette::WindowText, brush3);
+        palette58.setBrush(QPalette::Inactive, QPalette::WindowText, brush3);
+        palette58.setBrush(QPalette::Disabled, QPalette::WindowText, brush2);
+        label_136->setPalette(palette58);
         label_136->setFont(font);
         label_137 = new QLabel(page_4);
         label_137->setObjectName(QString::fromUtf8("label_137"));
         label_137->setGeometry(QRect(240, 40, 81, 31));
-        QPalette palette56;
-        palette56.setBrush(QPalette::Active, QPalette::WindowText, brush3);
-        palette56.setBrush(QPalette::Inactive, QPalette::WindowText, brush3);
-        palette56.setBrush(QPalette::Disabled, QPalette::WindowText, brush2);
-        label_137->setPalette(palette56);
+        QPalette palette59;
+        palette59.setBrush(QPalette::Active, QPalette::WindowText, brush3);
+        palette59.setBrush(QPalette::Inactive, QPalette::WindowText, brush3);
+        palette59.setBrush(QPalette::Disabled, QPalette::WindowText, brush2);
+        label_137->setPalette(palette59);
         label_137->setFont(font);
         label_138 = new QLabel(page_4);
         label_138->setObjectName(QString::fromUtf8("label_138"));
@@ -1331,11 +1405,11 @@ public:
         groupBox_10 = new QGroupBox(page_5);
         groupBox_10->setObjectName(QString::fromUtf8("groupBox_10"));
         groupBox_10->setGeometry(QRect(670, 230, 601, 451));
-        QPalette palette57;
-        palette57.setBrush(QPalette::Active, QPalette::WindowText, brush4);
-        palette57.setBrush(QPalette::Inactive, QPalette::WindowText, brush4);
-        palette57.setBrush(QPalette::Disabled, QPalette::WindowText, brush2);
-        groupBox_10->setPalette(palette57);
+        QPalette palette60;
+        palette60.setBrush(QPalette::Active, QPalette::WindowText, brush4);
+        palette60.setBrush(QPalette::Inactive, QPalette::WindowText, brush4);
+        palette60.setBrush(QPalette::Disabled, QPalette::WindowText, brush2);
+        groupBox_10->setPalette(palette60);
         groupBox_10->setFont(font5);
         groupBox_10->setLayoutDirection(Qt::LeftToRight);
         groupBox_10->setAlignment(Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter);
@@ -1363,26 +1437,26 @@ public:
         pushButton_read_data01->setSizePolicy(sizePolicy2);
         pushButton_read_data01->setMinimumSize(QSize(0, 0));
         pushButton_read_data01->setMaximumSize(QSize(200, 100));
-        QPalette palette58;
-        palette58.setBrush(QPalette::Active, QPalette::WindowText, brush3);
-        palette58.setBrush(QPalette::Active, QPalette::Text, brush3);
-        palette58.setBrush(QPalette::Active, QPalette::ButtonText, brush4);
+        QPalette palette61;
+        palette61.setBrush(QPalette::Active, QPalette::WindowText, brush3);
+        palette61.setBrush(QPalette::Active, QPalette::Text, brush3);
+        palette61.setBrush(QPalette::Active, QPalette::ButtonText, brush4);
 #if QT_VERSION >= QT_VERSION_CHECK(5, 12, 0)
-        palette58.setBrush(QPalette::Active, QPalette::PlaceholderText, brush5);
+        palette61.setBrush(QPalette::Active, QPalette::PlaceholderText, brush5);
 #endif
-        palette58.setBrush(QPalette::Inactive, QPalette::WindowText, brush3);
-        palette58.setBrush(QPalette::Inactive, QPalette::Text, brush3);
-        palette58.setBrush(QPalette::Inactive, QPalette::ButtonText, brush4);
+        palette61.setBrush(QPalette::Inactive, QPalette::WindowText, brush3);
+        palette61.setBrush(QPalette::Inactive, QPalette::Text, brush3);
+        palette61.setBrush(QPalette::Inactive, QPalette::ButtonText, brush4);
 #if QT_VERSION >= QT_VERSION_CHECK(5, 12, 0)
-        palette58.setBrush(QPalette::Inactive, QPalette::PlaceholderText, brush5);
+        palette61.setBrush(QPalette::Inactive, QPalette::PlaceholderText, brush5);
 #endif
-        palette58.setBrush(QPalette::Disabled, QPalette::WindowText, brush2);
-        palette58.setBrush(QPalette::Disabled, QPalette::Text, brush2);
-        palette58.setBrush(QPalette::Disabled, QPalette::ButtonText, brush2);
+        palette61.setBrush(QPalette::Disabled, QPalette::WindowText, brush2);
+        palette61.setBrush(QPalette::Disabled, QPalette::Text, brush2);
+        palette61.setBrush(QPalette::Disabled, QPalette::ButtonText, brush2);
 #if QT_VERSION >= QT_VERSION_CHECK(5, 12, 0)
-        palette58.setBrush(QPalette::Disabled, QPalette::PlaceholderText, brush6);
+        palette61.setBrush(QPalette::Disabled, QPalette::PlaceholderText, brush6);
 #endif
-        pushButton_read_data01->setPalette(palette58);
+        pushButton_read_data01->setPalette(palette61);
         pushButton_read_data01->setFont(font);
         label_115 = new QLabel(page_5);
         label_115->setObjectName(QString::fromUtf8("label_115"));
@@ -1391,29 +1465,29 @@ public:
         label_117 = new QLabel(page_5);
         label_117->setObjectName(QString::fromUtf8("label_117"));
         label_117->setGeometry(QRect(500, 40, 81, 31));
-        QPalette palette59;
-        palette59.setBrush(QPalette::Active, QPalette::WindowText, brush3);
-        palette59.setBrush(QPalette::Inactive, QPalette::WindowText, brush3);
-        palette59.setBrush(QPalette::Disabled, QPalette::WindowText, brush2);
-        label_117->setPalette(palette59);
+        QPalette palette62;
+        palette62.setBrush(QPalette::Active, QPalette::WindowText, brush3);
+        palette62.setBrush(QPalette::Inactive, QPalette::WindowText, brush3);
+        palette62.setBrush(QPalette::Disabled, QPalette::WindowText, brush2);
+        label_117->setPalette(palette62);
         label_117->setFont(font);
         label_75 = new QLabel(page_5);
         label_75->setObjectName(QString::fromUtf8("label_75"));
         label_75->setGeometry(QRect(680, 150, 271, 31));
-        QPalette palette60;
-        palette60.setBrush(QPalette::Active, QPalette::WindowText, brush1);
-        palette60.setBrush(QPalette::Inactive, QPalette::WindowText, brush1);
-        palette60.setBrush(QPalette::Disabled, QPalette::WindowText, brush2);
-        label_75->setPalette(palette60);
+        QPalette palette63;
+        palette63.setBrush(QPalette::Active, QPalette::WindowText, brush1);
+        palette63.setBrush(QPalette::Inactive, QPalette::WindowText, brush1);
+        palette63.setBrush(QPalette::Disabled, QPalette::WindowText, brush2);
+        label_75->setPalette(palette63);
         label_75->setFont(font3);
         groupBox_11 = new QGroupBox(page_5);
         groupBox_11->setObjectName(QString::fromUtf8("groupBox_11"));
         groupBox_11->setGeometry(QRect(20, 230, 601, 451));
-        QPalette palette61;
-        palette61.setBrush(QPalette::Active, QPalette::WindowText, brush4);
-        palette61.setBrush(QPalette::Inactive, QPalette::WindowText, brush4);
-        palette61.setBrush(QPalette::Disabled, QPalette::WindowText, brush2);
-        groupBox_11->setPalette(palette61);
+        QPalette palette64;
+        palette64.setBrush(QPalette::Active, QPalette::WindowText, brush4);
+        palette64.setBrush(QPalette::Inactive, QPalette::WindowText, brush4);
+        palette64.setBrush(QPalette::Disabled, QPalette::WindowText, brush2);
+        groupBox_11->setPalette(palette64);
         groupBox_11->setFont(font5);
         groupBox_11->setLayoutDirection(Qt::LeftToRight);
         groupBox_11->setAlignment(Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter);
@@ -1423,11 +1497,11 @@ public:
         label_114 = new QLabel(page_5);
         label_114->setObjectName(QString::fromUtf8("label_114"));
         label_114->setGeometry(QRect(760, 40, 81, 31));
-        QPalette palette62;
-        palette62.setBrush(QPalette::Active, QPalette::WindowText, brush3);
-        palette62.setBrush(QPalette::Inactive, QPalette::WindowText, brush3);
-        palette62.setBrush(QPalette::Disabled, QPalette::WindowText, brush2);
-        label_114->setPalette(palette62);
+        QPalette palette65;
+        palette65.setBrush(QPalette::Active, QPalette::WindowText, brush3);
+        palette65.setBrush(QPalette::Inactive, QPalette::WindowText, brush3);
+        palette65.setBrush(QPalette::Disabled, QPalette::WindowText, brush2);
+        label_114->setPalette(palette65);
         label_114->setFont(font);
         lineEdit_data01_path_2 = new QLineEdit(page_5);
         lineEdit_data01_path_2->setObjectName(QString::fromUtf8("lineEdit_data01_path_2"));
@@ -1469,79 +1543,79 @@ public:
         pushButton_read_load01->setSizePolicy(sizePolicy2);
         pushButton_read_load01->setMinimumSize(QSize(0, 0));
         pushButton_read_load01->setMaximumSize(QSize(200, 100));
-        QPalette palette63;
-        palette63.setBrush(QPalette::Active, QPalette::WindowText, brush3);
-        palette63.setBrush(QPalette::Active, QPalette::Text, brush3);
-        palette63.setBrush(QPalette::Active, QPalette::ButtonText, brush4);
+        QPalette palette66;
+        palette66.setBrush(QPalette::Active, QPalette::WindowText, brush3);
+        palette66.setBrush(QPalette::Active, QPalette::Text, brush3);
+        palette66.setBrush(QPalette::Active, QPalette::ButtonText, brush4);
 #if QT_VERSION >= QT_VERSION_CHECK(5, 12, 0)
-        palette63.setBrush(QPalette::Active, QPalette::PlaceholderText, brush5);
+        palette66.setBrush(QPalette::Active, QPalette::PlaceholderText, brush5);
 #endif
-        palette63.setBrush(QPalette::Inactive, QPalette::WindowText, brush3);
-        palette63.setBrush(QPalette::Inactive, QPalette::Text, brush3);
-        palette63.setBrush(QPalette::Inactive, QPalette::ButtonText, brush4);
+        palette66.setBrush(QPalette::Inactive, QPalette::WindowText, brush3);
+        palette66.setBrush(QPalette::Inactive, QPalette::Text, brush3);
+        palette66.setBrush(QPalette::Inactive, QPalette::ButtonText, brush4);
 #if QT_VERSION >= QT_VERSION_CHECK(5, 12, 0)
-        palette63.setBrush(QPalette::Inactive, QPalette::PlaceholderText, brush5);
+        palette66.setBrush(QPalette::Inactive, QPalette::PlaceholderText, brush5);
 #endif
-        palette63.setBrush(QPalette::Disabled, QPalette::WindowText, brush2);
-        palette63.setBrush(QPalette::Disabled, QPalette::Text, brush2);
-        palette63.setBrush(QPalette::Disabled, QPalette::ButtonText, brush2);
+        palette66.setBrush(QPalette::Disabled, QPalette::WindowText, brush2);
+        palette66.setBrush(QPalette::Disabled, QPalette::Text, brush2);
+        palette66.setBrush(QPalette::Disabled, QPalette::ButtonText, brush2);
 #if QT_VERSION >= QT_VERSION_CHECK(5, 12, 0)
-        palette63.setBrush(QPalette::Disabled, QPalette::PlaceholderText, brush6);
+        palette66.setBrush(QPalette::Disabled, QPalette::PlaceholderText, brush6);
 #endif
-        pushButton_read_load01->setPalette(palette63);
+        pushButton_read_load01->setPalette(palette66);
         pushButton_read_load01->setFont(font);
         label_116 = new QLabel(page_5);
         label_116->setObjectName(QString::fromUtf8("label_116"));
         label_116->setGeometry(QRect(30, 40, 81, 31));
-        QPalette palette64;
-        palette64.setBrush(QPalette::Active, QPalette::WindowText, brush3);
-        palette64.setBrush(QPalette::Inactive, QPalette::WindowText, brush3);
-        palette64.setBrush(QPalette::Disabled, QPalette::WindowText, brush2);
-        label_116->setPalette(palette64);
-        label_116->setFont(font);
-        pushButton_show_data01_load01 = new QPushButton(page_5);
-        pushButton_show_data01_load01->setObjectName(QString::fromUtf8("pushButton_show_data01_load01"));
-        pushButton_show_data01_load01->setGeometry(QRect(600, 690, 90, 31));
-        QPalette palette65;
-        palette65.setBrush(QPalette::Active, QPalette::ButtonText, brush4);
-        palette65.setBrush(QPalette::Inactive, QPalette::ButtonText, brush4);
-        palette65.setBrush(QPalette::Disabled, QPalette::ButtonText, brush2);
-        pushButton_show_data01_load01->setPalette(palette65);
-        label_118 = new QLabel(page_5);
-        label_118->setObjectName(QString::fromUtf8("label_118"));
-        label_118->setGeometry(QRect(1020, 40, 81, 31));
-        QPalette palette66;
-        palette66.setBrush(QPalette::Active, QPalette::WindowText, brush3);
-        palette66.setBrush(QPalette::Inactive, QPalette::WindowText, brush3);
-        palette66.setBrush(QPalette::Disabled, QPalette::WindowText, brush2);
-        label_118->setPalette(palette66);
-        label_118->setFont(font);
-        label_119 = new QLabel(page_5);
-        label_119->setObjectName(QString::fromUtf8("label_119"));
-        label_119->setGeometry(QRect(240, 40, 81, 31));
         QPalette palette67;
         palette67.setBrush(QPalette::Active, QPalette::WindowText, brush3);
         palette67.setBrush(QPalette::Inactive, QPalette::WindowText, brush3);
         palette67.setBrush(QPalette::Disabled, QPalette::WindowText, brush2);
-        label_119->setPalette(palette67);
+        label_116->setPalette(palette67);
+        label_116->setFont(font);
+        pushButton_show_data01_load01 = new QPushButton(page_5);
+        pushButton_show_data01_load01->setObjectName(QString::fromUtf8("pushButton_show_data01_load01"));
+        pushButton_show_data01_load01->setGeometry(QRect(600, 690, 90, 31));
+        QPalette palette68;
+        palette68.setBrush(QPalette::Active, QPalette::ButtonText, brush4);
+        palette68.setBrush(QPalette::Inactive, QPalette::ButtonText, brush4);
+        palette68.setBrush(QPalette::Disabled, QPalette::ButtonText, brush2);
+        pushButton_show_data01_load01->setPalette(palette68);
+        label_118 = new QLabel(page_5);
+        label_118->setObjectName(QString::fromUtf8("label_118"));
+        label_118->setGeometry(QRect(1020, 40, 81, 31));
+        QPalette palette69;
+        palette69.setBrush(QPalette::Active, QPalette::WindowText, brush3);
+        palette69.setBrush(QPalette::Inactive, QPalette::WindowText, brush3);
+        palette69.setBrush(QPalette::Disabled, QPalette::WindowText, brush2);
+        label_118->setPalette(palette69);
+        label_118->setFont(font);
+        label_119 = new QLabel(page_5);
+        label_119->setObjectName(QString::fromUtf8("label_119"));
+        label_119->setGeometry(QRect(240, 40, 81, 31));
+        QPalette palette70;
+        palette70.setBrush(QPalette::Active, QPalette::WindowText, brush3);
+        palette70.setBrush(QPalette::Inactive, QPalette::WindowText, brush3);
+        palette70.setBrush(QPalette::Disabled, QPalette::WindowText, brush2);
+        label_119->setPalette(palette70);
         label_119->setFont(font);
         label_73 = new QLabel(page_5);
         label_73->setObjectName(QString::fromUtf8("label_73"));
         label_73->setGeometry(QRect(30, 150, 271, 31));
-        QPalette palette68;
-        palette68.setBrush(QPalette::Active, QPalette::WindowText, brush1);
-        palette68.setBrush(QPalette::Inactive, QPalette::WindowText, brush1);
-        palette68.setBrush(QPalette::Disabled, QPalette::WindowText, brush2);
-        label_73->setPalette(palette68);
+        QPalette palette71;
+        palette71.setBrush(QPalette::Active, QPalette::WindowText, brush1);
+        palette71.setBrush(QPalette::Inactive, QPalette::WindowText, brush1);
+        palette71.setBrush(QPalette::Disabled, QPalette::WindowText, brush2);
+        label_73->setPalette(palette71);
         label_73->setFont(font3);
         label_74 = new QLabel(page_5);
         label_74->setObjectName(QString::fromUtf8("label_74"));
         label_74->setGeometry(QRect(30, 80, 271, 31));
-        QPalette palette69;
-        palette69.setBrush(QPalette::Active, QPalette::WindowText, brush1);
-        palette69.setBrush(QPalette::Inactive, QPalette::WindowText, brush1);
-        palette69.setBrush(QPalette::Disabled, QPalette::WindowText, brush2);
-        label_74->setPalette(palette69);
+        QPalette palette72;
+        palette72.setBrush(QPalette::Active, QPalette::WindowText, brush1);
+        palette72.setBrush(QPalette::Inactive, QPalette::WindowText, brush1);
+        palette72.setBrush(QPalette::Disabled, QPalette::WindowText, brush2);
+        label_74->setPalette(palette72);
         label_74->setFont(font3);
         pushButton_read_coff_2 = new QPushButton(page_5);
         pushButton_read_coff_2->setObjectName(QString::fromUtf8("pushButton_read_coff_2"));
@@ -1550,26 +1624,26 @@ public:
         pushButton_read_coff_2->setSizePolicy(sizePolicy2);
         pushButton_read_coff_2->setMinimumSize(QSize(0, 0));
         pushButton_read_coff_2->setMaximumSize(QSize(200, 100));
-        QPalette palette70;
-        palette70.setBrush(QPalette::Active, QPalette::WindowText, brush3);
-        palette70.setBrush(QPalette::Active, QPalette::Text, brush3);
-        palette70.setBrush(QPalette::Active, QPalette::ButtonText, brush4);
+        QPalette palette73;
+        palette73.setBrush(QPalette::Active, QPalette::WindowText, brush3);
+        palette73.setBrush(QPalette::Active, QPalette::Text, brush3);
+        palette73.setBrush(QPalette::Active, QPalette::ButtonText, brush4);
 #if QT_VERSION >= QT_VERSION_CHECK(5, 12, 0)
-        palette70.setBrush(QPalette::Active, QPalette::PlaceholderText, brush5);
+        palette73.setBrush(QPalette::Active, QPalette::PlaceholderText, brush5);
 #endif
-        palette70.setBrush(QPalette::Inactive, QPalette::WindowText, brush3);
-        palette70.setBrush(QPalette::Inactive, QPalette::Text, brush3);
-        palette70.setBrush(QPalette::Inactive, QPalette::ButtonText, brush4);
+        palette73.setBrush(QPalette::Inactive, QPalette::WindowText, brush3);
+        palette73.setBrush(QPalette::Inactive, QPalette::Text, brush3);
+        palette73.setBrush(QPalette::Inactive, QPalette::ButtonText, brush4);
 #if QT_VERSION >= QT_VERSION_CHECK(5, 12, 0)
-        palette70.setBrush(QPalette::Inactive, QPalette::PlaceholderText, brush5);
+        palette73.setBrush(QPalette::Inactive, QPalette::PlaceholderText, brush5);
 #endif
-        palette70.setBrush(QPalette::Disabled, QPalette::WindowText, brush2);
-        palette70.setBrush(QPalette::Disabled, QPalette::Text, brush2);
-        palette70.setBrush(QPalette::Disabled, QPalette::ButtonText, brush2);
+        palette73.setBrush(QPalette::Disabled, QPalette::WindowText, brush2);
+        palette73.setBrush(QPalette::Disabled, QPalette::Text, brush2);
+        palette73.setBrush(QPalette::Disabled, QPalette::ButtonText, brush2);
 #if QT_VERSION >= QT_VERSION_CHECK(5, 12, 0)
-        palette70.setBrush(QPalette::Disabled, QPalette::PlaceholderText, brush6);
+        palette73.setBrush(QPalette::Disabled, QPalette::PlaceholderText, brush6);
 #endif
-        pushButton_read_coff_2->setPalette(palette70);
+        pushButton_read_coff_2->setPalette(palette73);
         pushButton_read_coff_2->setFont(font);
         stackedWidget->addWidget(page_5);
         page_6 = new QWidget();
@@ -1584,11 +1658,11 @@ public:
         groupBox_7 = new QGroupBox(page_6);
         groupBox_7->setObjectName(QString::fromUtf8("groupBox_7"));
         groupBox_7->setGeometry(QRect(20, 80, 1251, 231));
-        QPalette palette71;
-        palette71.setBrush(QPalette::Active, QPalette::WindowText, brush4);
-        palette71.setBrush(QPalette::Inactive, QPalette::WindowText, brush4);
-        palette71.setBrush(QPalette::Disabled, QPalette::WindowText, brush2);
-        groupBox_7->setPalette(palette71);
+        QPalette palette74;
+        palette74.setBrush(QPalette::Active, QPalette::WindowText, brush4);
+        palette74.setBrush(QPalette::Inactive, QPalette::WindowText, brush4);
+        palette74.setBrush(QPalette::Disabled, QPalette::WindowText, brush2);
+        groupBox_7->setPalette(palette74);
         groupBox_7->setFont(font5);
         groupBox_7->setLayoutDirection(Qt::LeftToRight);
         groupBox_7->setAlignment(Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter);
@@ -1604,11 +1678,11 @@ public:
         label_33 = new QLabel(page_6);
         label_33->setObjectName(QString::fromUtf8("label_33"));
         label_33->setGeometry(QRect(240, 40, 81, 31));
-        QPalette palette72;
-        palette72.setBrush(QPalette::Active, QPalette::WindowText, brush3);
-        palette72.setBrush(QPalette::Inactive, QPalette::WindowText, brush3);
-        palette72.setBrush(QPalette::Disabled, QPalette::WindowText, brush2);
-        label_33->setPalette(palette72);
+        QPalette palette75;
+        palette75.setBrush(QPalette::Active, QPalette::WindowText, brush3);
+        palette75.setBrush(QPalette::Inactive, QPalette::WindowText, brush3);
+        palette75.setBrush(QPalette::Disabled, QPalette::WindowText, brush2);
+        label_33->setPalette(palette75);
         label_33->setFont(font);
         tableView_comprehen_err_ass = new QTableView(page_6);
         tableView_comprehen_err_ass->setObjectName(QString::fromUtf8("tableView_comprehen_err_ass"));
@@ -1618,20 +1692,20 @@ public:
         label_16 = new QLabel(page_6);
         label_16->setObjectName(QString::fromUtf8("label_16"));
         label_16->setGeometry(QRect(760, 40, 81, 31));
-        QPalette palette73;
-        palette73.setBrush(QPalette::Active, QPalette::WindowText, brush3);
-        palette73.setBrush(QPalette::Inactive, QPalette::WindowText, brush3);
-        palette73.setBrush(QPalette::Disabled, QPalette::WindowText, brush2);
-        label_16->setPalette(palette73);
+        QPalette palette76;
+        palette76.setBrush(QPalette::Active, QPalette::WindowText, brush3);
+        palette76.setBrush(QPalette::Inactive, QPalette::WindowText, brush3);
+        palette76.setBrush(QPalette::Disabled, QPalette::WindowText, brush2);
+        label_16->setPalette(palette76);
         label_16->setFont(font);
         label_37 = new QLabel(page_6);
         label_37->setObjectName(QString::fromUtf8("label_37"));
         label_37->setGeometry(QRect(1020, 40, 81, 31));
-        QPalette palette74;
-        palette74.setBrush(QPalette::Active, QPalette::WindowText, brush3);
-        palette74.setBrush(QPalette::Inactive, QPalette::WindowText, brush3);
-        palette74.setBrush(QPalette::Disabled, QPalette::WindowText, brush2);
-        label_37->setPalette(palette74);
+        QPalette palette77;
+        palette77.setBrush(QPalette::Active, QPalette::WindowText, brush3);
+        palette77.setBrush(QPalette::Inactive, QPalette::WindowText, brush3);
+        palette77.setBrush(QPalette::Disabled, QPalette::WindowText, brush2);
+        label_37->setPalette(palette77);
         label_37->setFont(font);
         tableView_comprehen_66 = new QTableView(page_6);
         tableView_comprehen_66->setObjectName(QString::fromUtf8("tableView_comprehen_66"));
@@ -1641,32 +1715,32 @@ public:
         pushButton_data_comprehen_save = new QPushButton(page_6);
         pushButton_data_comprehen_save->setObjectName(QString::fromUtf8("pushButton_data_comprehen_save"));
         pushButton_data_comprehen_save->setGeometry(QRect(670, 690, 91, 35));
-        QPalette palette75;
-        palette75.setBrush(QPalette::Active, QPalette::ButtonText, brush4);
-        palette75.setBrush(QPalette::Inactive, QPalette::ButtonText, brush4);
-        palette75.setBrush(QPalette::Disabled, QPalette::ButtonText, brush2);
-        pushButton_data_comprehen_save->setPalette(palette75);
+        QPalette palette78;
+        palette78.setBrush(QPalette::Active, QPalette::ButtonText, brush4);
+        palette78.setBrush(QPalette::Inactive, QPalette::ButtonText, brush4);
+        palette78.setBrush(QPalette::Disabled, QPalette::ButtonText, brush2);
+        pushButton_data_comprehen_save->setPalette(palette78);
         pushButton_data_comprehen_save->setFont(font5);
         checkBox_method1_2 = new QCheckBox(page_6);
         checkBox_method1_2->setObjectName(QString::fromUtf8("checkBox_method1_2"));
         checkBox_method1_2->setGeometry(QRect(30, 470, 631, 19));
-        QPalette palette76;
-        palette76.setBrush(QPalette::Active, QPalette::WindowText, brush1);
-        palette76.setBrush(QPalette::Active, QPalette::Text, brush3);
+        QPalette palette79;
+        palette79.setBrush(QPalette::Active, QPalette::WindowText, brush1);
+        palette79.setBrush(QPalette::Active, QPalette::Text, brush3);
 #if QT_VERSION >= QT_VERSION_CHECK(5, 12, 0)
-        palette76.setBrush(QPalette::Active, QPalette::PlaceholderText, brush6);
+        palette79.setBrush(QPalette::Active, QPalette::PlaceholderText, brush6);
 #endif
-        palette76.setBrush(QPalette::Inactive, QPalette::WindowText, brush1);
-        palette76.setBrush(QPalette::Inactive, QPalette::Text, brush3);
+        palette79.setBrush(QPalette::Inactive, QPalette::WindowText, brush1);
+        palette79.setBrush(QPalette::Inactive, QPalette::Text, brush3);
 #if QT_VERSION >= QT_VERSION_CHECK(5, 12, 0)
-        palette76.setBrush(QPalette::Inactive, QPalette::PlaceholderText, brush6);
+        palette79.setBrush(QPalette::Inactive, QPalette::PlaceholderText, brush6);
 #endif
-        palette76.setBrush(QPalette::Disabled, QPalette::WindowText, brush2);
-        palette76.setBrush(QPalette::Disabled, QPalette::Text, brush2);
+        palette79.setBrush(QPalette::Disabled, QPalette::WindowText, brush2);
+        palette79.setBrush(QPalette::Disabled, QPalette::Text, brush2);
 #if QT_VERSION >= QT_VERSION_CHECK(5, 12, 0)
-        palette76.setBrush(QPalette::Disabled, QPalette::PlaceholderText, brush6);
+        palette79.setBrush(QPalette::Disabled, QPalette::PlaceholderText, brush6);
 #endif
-        checkBox_method1_2->setPalette(palette76);
+        checkBox_method1_2->setPalette(palette79);
         lineEdit_b_type_4 = new QLineEdit(page_6);
         lineEdit_b_type_4->setObjectName(QString::fromUtf8("lineEdit_b_type_4"));
         lineEdit_b_type_4->setEnabled(true);
@@ -1678,11 +1752,11 @@ public:
         pushButton_data_comprehen_ass = new QPushButton(page_6);
         pushButton_data_comprehen_ass->setObjectName(QString::fromUtf8("pushButton_data_comprehen_ass"));
         pushButton_data_comprehen_ass->setGeometry(QRect(510, 690, 91, 35));
-        QPalette palette77;
-        palette77.setBrush(QPalette::Active, QPalette::ButtonText, brush4);
-        palette77.setBrush(QPalette::Inactive, QPalette::ButtonText, brush4);
-        palette77.setBrush(QPalette::Disabled, QPalette::ButtonText, brush2);
-        pushButton_data_comprehen_ass->setPalette(palette77);
+        QPalette palette80;
+        palette80.setBrush(QPalette::Active, QPalette::ButtonText, brush4);
+        palette80.setBrush(QPalette::Inactive, QPalette::ButtonText, brush4);
+        palette80.setBrush(QPalette::Disabled, QPalette::ButtonText, brush2);
+        pushButton_data_comprehen_ass->setPalette(palette80);
         pushButton_data_comprehen_ass->setFont(font);
         lineEdit_b_date_5 = new QLineEdit(page_6);
         lineEdit_b_date_5->setObjectName(QString::fromUtf8("lineEdit_b_date_5"));
@@ -1694,23 +1768,23 @@ public:
         checkBox_method1 = new QCheckBox(page_6);
         checkBox_method1->setObjectName(QString::fromUtf8("checkBox_method1"));
         checkBox_method1->setGeometry(QRect(30, 320, 631, 19));
-        QPalette palette78;
-        palette78.setBrush(QPalette::Active, QPalette::WindowText, brush1);
-        palette78.setBrush(QPalette::Active, QPalette::Text, brush3);
+        QPalette palette81;
+        palette81.setBrush(QPalette::Active, QPalette::WindowText, brush1);
+        palette81.setBrush(QPalette::Active, QPalette::Text, brush3);
 #if QT_VERSION >= QT_VERSION_CHECK(5, 12, 0)
-        palette78.setBrush(QPalette::Active, QPalette::PlaceholderText, brush6);
+        palette81.setBrush(QPalette::Active, QPalette::PlaceholderText, brush6);
 #endif
-        palette78.setBrush(QPalette::Inactive, QPalette::WindowText, brush1);
-        palette78.setBrush(QPalette::Inactive, QPalette::Text, brush3);
+        palette81.setBrush(QPalette::Inactive, QPalette::WindowText, brush1);
+        palette81.setBrush(QPalette::Inactive, QPalette::Text, brush3);
 #if QT_VERSION >= QT_VERSION_CHECK(5, 12, 0)
-        palette78.setBrush(QPalette::Inactive, QPalette::PlaceholderText, brush6);
+        palette81.setBrush(QPalette::Inactive, QPalette::PlaceholderText, brush6);
 #endif
-        palette78.setBrush(QPalette::Disabled, QPalette::WindowText, brush2);
-        palette78.setBrush(QPalette::Disabled, QPalette::Text, brush2);
+        palette81.setBrush(QPalette::Disabled, QPalette::WindowText, brush2);
+        palette81.setBrush(QPalette::Disabled, QPalette::Text, brush2);
 #if QT_VERSION >= QT_VERSION_CHECK(5, 12, 0)
-        palette78.setBrush(QPalette::Disabled, QPalette::PlaceholderText, brush6);
+        palette81.setBrush(QPalette::Disabled, QPalette::PlaceholderText, brush6);
 #endif
-        checkBox_method1->setPalette(palette78);
+        checkBox_method1->setPalette(palette81);
         lineEdit_b_name_5 = new QLineEdit(page_6);
         lineEdit_b_name_5->setObjectName(QString::fromUtf8("lineEdit_b_name_5"));
         lineEdit_b_name_5->setEnabled(true);
@@ -1729,20 +1803,20 @@ public:
         label_27 = new QLabel(page_6);
         label_27->setObjectName(QString::fromUtf8("label_27"));
         label_27->setGeometry(QRect(30, 40, 81, 31));
-        QPalette palette79;
-        palette79.setBrush(QPalette::Active, QPalette::WindowText, brush3);
-        palette79.setBrush(QPalette::Inactive, QPalette::WindowText, brush3);
-        palette79.setBrush(QPalette::Disabled, QPalette::WindowText, brush2);
-        label_27->setPalette(palette79);
+        QPalette palette82;
+        palette82.setBrush(QPalette::Active, QPalette::WindowText, brush3);
+        palette82.setBrush(QPalette::Inactive, QPalette::WindowText, brush3);
+        palette82.setBrush(QPalette::Disabled, QPalette::WindowText, brush2);
+        label_27->setPalette(palette82);
         label_27->setFont(font);
         label_39 = new QLabel(page_6);
         label_39->setObjectName(QString::fromUtf8("label_39"));
         label_39->setGeometry(QRect(500, 40, 81, 31));
-        QPalette palette80;
-        palette80.setBrush(QPalette::Active, QPalette::WindowText, brush3);
-        palette80.setBrush(QPalette::Inactive, QPalette::WindowText, brush3);
-        palette80.setBrush(QPalette::Disabled, QPalette::WindowText, brush2);
-        label_39->setPalette(palette80);
+        QPalette palette83;
+        palette83.setBrush(QPalette::Active, QPalette::WindowText, brush3);
+        palette83.setBrush(QPalette::Inactive, QPalette::WindowText, brush3);
+        palette83.setBrush(QPalette::Disabled, QPalette::WindowText, brush2);
+        label_39->setPalette(palette83);
         label_39->setFont(font);
         stackedWidget->addWidget(page_6);
         page_7 = new QWidget();
@@ -1785,13 +1859,13 @@ public:
         labelCL = new QLabel(page_7);
         labelCL->setObjectName(QString::fromUtf8("labelCL"));
         labelCL->setGeometry(QRect(30, 440, 511, 41));
-        QPalette palette81;
+        QPalette palette84;
         QBrush brush7(QColor(255, 0, 0, 255));
         brush7.setStyle(Qt::SolidPattern);
-        palette81.setBrush(QPalette::Active, QPalette::WindowText, brush7);
-        palette81.setBrush(QPalette::Inactive, QPalette::WindowText, brush7);
-        palette81.setBrush(QPalette::Disabled, QPalette::WindowText, brush2);
-        labelCL->setPalette(palette81);
+        palette84.setBrush(QPalette::Active, QPalette::WindowText, brush7);
+        palette84.setBrush(QPalette::Inactive, QPalette::WindowText, brush7);
+        palette84.setBrush(QPalette::Disabled, QPalette::WindowText, brush2);
+        labelCL->setPalette(palette84);
         labelCL->setFont(font3);
         TableWidget_b = new QTableWidget(page_7);
         if (TableWidget_b->columnCount() < 6)
@@ -1821,11 +1895,11 @@ public:
         labelTecdata = new QLabel(page_7);
         labelTecdata->setObjectName(QString::fromUtf8("labelTecdata"));
         labelTecdata->setGeometry(QRect(30, 80, 281, 41));
-        QPalette palette82;
-        palette82.setBrush(QPalette::Active, QPalette::WindowText, brush7);
-        palette82.setBrush(QPalette::Inactive, QPalette::WindowText, brush7);
-        palette82.setBrush(QPalette::Disabled, QPalette::WindowText, brush2);
-        labelTecdata->setPalette(palette82);
+        QPalette palette85;
+        palette85.setBrush(QPalette::Active, QPalette::WindowText, brush7);
+        palette85.setBrush(QPalette::Inactive, QPalette::WindowText, brush7);
+        palette85.setBrush(QPalette::Disabled, QPalette::WindowText, brush2);
+        labelTecdata->setPalette(palette85);
         labelTecdata->setFont(font3);
         lineEdit_EV_save_path = new QLineEdit(page_7);
         lineEdit_EV_save_path->setObjectName(QString::fromUtf8("lineEdit_EV_save_path"));
@@ -1856,11 +1930,11 @@ public:
         pushButton_report_save = new QPushButton(page_7);
         pushButton_report_save->setObjectName(QString::fromUtf8("pushButton_report_save"));
         pushButton_report_save->setGeometry(QRect(590, 690, 111, 31));
-        QPalette palette83;
-        palette83.setBrush(QPalette::Active, QPalette::ButtonText, brush7);
-        palette83.setBrush(QPalette::Inactive, QPalette::ButtonText, brush7);
-        palette83.setBrush(QPalette::Disabled, QPalette::ButtonText, brush2);
-        pushButton_report_save->setPalette(palette83);
+        QPalette palette86;
+        palette86.setBrush(QPalette::Active, QPalette::ButtonText, brush7);
+        palette86.setBrush(QPalette::Inactive, QPalette::ButtonText, brush7);
+        palette86.setBrush(QPalette::Disabled, QPalette::ButtonText, brush2);
+        pushButton_report_save->setPalette(palette86);
         pushButton_report_save->setFont(font4);
         label_b_person_8 = new QLabel(page_7);
         label_b_person_8->setObjectName(QString::fromUtf8("label_b_person_8"));
@@ -1886,11 +1960,11 @@ public:
         labelCLError = new QLabel(page_7);
         labelCLError->setObjectName(QString::fromUtf8("labelCLError"));
         labelCLError->setGeometry(QRect(30, 550, 511, 41));
-        QPalette palette84;
-        palette84.setBrush(QPalette::Active, QPalette::WindowText, brush7);
-        palette84.setBrush(QPalette::Inactive, QPalette::WindowText, brush7);
-        palette84.setBrush(QPalette::Disabled, QPalette::WindowText, brush2);
-        labelCLError->setPalette(palette84);
+        QPalette palette87;
+        palette87.setBrush(QPalette::Active, QPalette::WindowText, brush7);
+        palette87.setBrush(QPalette::Inactive, QPalette::WindowText, brush7);
+        palette87.setBrush(QPalette::Disabled, QPalette::WindowText, brush2);
+        labelCLError->setPalette(palette87);
         labelCLError->setFont(font3);
         pushButton_choose_CLE = new QPushButton(page_7);
         pushButton_choose_CLE->setObjectName(QString::fromUtf8("pushButton_choose_CLE"));
@@ -1917,11 +1991,11 @@ public:
         labelgujizhi = new QLabel(page_7);
         labelgujizhi->setObjectName(QString::fromUtf8("labelgujizhi"));
         labelgujizhi->setGeometry(QRect(50, 300, 261, 30));
-        QPalette palette85;
-        palette85.setBrush(QPalette::Active, QPalette::WindowText, brush3);
-        palette85.setBrush(QPalette::Inactive, QPalette::WindowText, brush3);
-        palette85.setBrush(QPalette::Disabled, QPalette::WindowText, brush2);
-        labelgujizhi->setPalette(palette85);
+        QPalette palette88;
+        palette88.setBrush(QPalette::Active, QPalette::WindowText, brush3);
+        palette88.setBrush(QPalette::Inactive, QPalette::WindowText, brush3);
+        palette88.setBrush(QPalette::Disabled, QPalette::WindowText, brush2);
+        labelgujizhi->setPalette(palette88);
         labelgujizhi->setFont(font);
         lineEdit_b_instru_8 = new QLineEdit(page_7);
         lineEdit_b_instru_8->setObjectName(QString::fromUtf8("lineEdit_b_instru_8"));
@@ -1930,11 +2004,11 @@ public:
         labelFormula = new QLabel(page_7);
         labelFormula->setObjectName(QString::fromUtf8("labelFormula"));
         labelFormula->setGeometry(QRect(30, 260, 571, 41));
-        QPalette palette86;
-        palette86.setBrush(QPalette::Active, QPalette::WindowText, brush7);
-        palette86.setBrush(QPalette::Inactive, QPalette::WindowText, brush7);
-        palette86.setBrush(QPalette::Disabled, QPalette::WindowText, brush2);
-        labelFormula->setPalette(palette86);
+        QPalette palette89;
+        palette89.setBrush(QPalette::Active, QPalette::WindowText, brush7);
+        palette89.setBrush(QPalette::Inactive, QPalette::WindowText, brush7);
+        palette89.setBrush(QPalette::Disabled, QPalette::WindowText, brush2);
+        labelFormula->setPalette(palette89);
         labelFormula->setFont(font3);
         labelerrorresult = new QLabel(page_7);
         labelerrorresult->setObjectName(QString::fromUtf8("labelerrorresult"));
@@ -2026,6 +2100,7 @@ public:
         QObject::connect(pushButton_coeff_save, SIGNAL(clicked()), WBalanceClass, SLOT(save_calibration()));
         QObject::connect(pushButton_read_confirm, SIGNAL(clicked()), WBalanceClass, SLOT(read_file_cofirm()));
         QObject::connect(pushButton_coeff_cal, SIGNAL(clicked()), WBalanceClass, SLOT(coeff_evaluate()));
+        QObject::connect(pushButton_read_load_00, SIGNAL(clicked()), WBalanceClass, SLOT(show_load00()));
 
         stackedWidget->setCurrentIndex(3);
 
@@ -2065,7 +2140,7 @@ public:
         lineEdit_b_date->setText(QString());
         lineEdit_b_person->setInputMask(QString());
         lineEdit_b_person->setText(QString());
-        label_22->setText(QCoreApplication::translate("WBalanceClass", ">> \346\225\260\346\215\256\350\257\273\345\217\226", nullptr));
+        label_22->setText(QCoreApplication::translate("WBalanceClass", ">> \346\240\241\345\207\206\346\250\241\345\236\213\347\263\273\346\225\260\350\257\204\344\274\260\342\200\224\346\225\260\346\215\256\350\257\273\345\217\226", nullptr));
         label_23->setText(QCoreApplication::translate("WBalanceClass", "\345\244\251\345\271\263\347\261\273\345\236\213\357\274\232", nullptr));
         label_24->setText(QCoreApplication::translate("WBalanceClass", "\344\273\252\345\231\250\350\256\276\345\244\207\357\274\232", nullptr));
         label_9->setText(QCoreApplication::translate("WBalanceClass", "\346\240\241\345\207\206\346\227\245\346\234\237\357\274\232", nullptr));
@@ -2094,7 +2169,7 @@ public:
         lineEdit_b_person_2->setInputMask(QString());
         lineEdit_b_person_2->setText(QString());
         label_20->setText(QCoreApplication::translate("WBalanceClass", "\345\244\251\345\271\263\345\236\213\345\217\267\357\274\232", nullptr));
-        label_26->setText(QCoreApplication::translate("WBalanceClass", ">> \346\225\260\346\215\256\345\210\206\346\236\220", nullptr));
+        label_26->setText(QCoreApplication::translate("WBalanceClass", ">> \346\240\241\345\207\206\346\250\241\345\236\213\347\263\273\346\225\260\350\257\204\344\274\260\342\200\224\346\225\260\346\215\256\345\210\206\346\236\220", nullptr));
         label_15->setText(QCoreApplication::translate("WBalanceClass", "\346\225\260\346\215\256\345\210\206\346\236\220\344\276\235\346\215\256\357\274\232\345\256\236\351\252\214\346\225\260\346\215\256\345\210\206\346\236\220", nullptr));
         label_28->setText(QCoreApplication::translate("WBalanceClass", "\350\275\275\350\215\267\346\225\260\346\215\256\346\240\207\345\207\206\345\267\256\346\226\207\344\273\266\350\267\257\345\276\204\357\274\232", nullptr));
         label_29->setText(QCoreApplication::translate("WBalanceClass", "\347\224\265\345\216\213\346\225\260\346\215\256\346\240\207\345\207\206\345\267\256\346\226\207\344\273\266\350\267\257\345\276\204\357\274\232", nullptr));
@@ -2148,6 +2223,9 @@ public:
         lineEdit_b_instru_6->setText(QString());
         pushButton_show_data00->setText(QCoreApplication::translate("WBalanceClass", "\347\241\256 \345\256\232", nullptr));
         pushButton_read_coff_00->setText(QCoreApplication::translate("WBalanceClass", "\345\217\246\351\200\211", nullptr));
+        label_87->setText(QCoreApplication::translate("WBalanceClass", "\351\207\215\345\244\215\345\212\240\350\275\275\350\275\275\350\215\267\346\225\260\346\215\256\346\226\207\344\273\266\350\267\257\345\276\204\357\274\232", nullptr));
+        pushButton_read_load_00->setText(QCoreApplication::translate("WBalanceClass", "\350\257\273\345\217\226\346\226\207\344\273\266", nullptr));
+        groupBox_15->setTitle(QCoreApplication::translate("WBalanceClass", "\350\275\275\350\215\267\346\225\260\346\215\256", nullptr));
         lineEdit_b_instru_9->setInputMask(QString());
         lineEdit_b_instru_9->setText(QString());
         pushButton_save00_result->setText(QCoreApplication::translate("WBalanceClass", "\344\277\235 \345\255\230", nullptr));
@@ -2263,4 +2341,4 @@ namespace Ui {
 
 QT_END_NAMESPACE
 
-#endif // WBALANCERHWRRH_H
+#endif // WBALANCEHUOJGS_H

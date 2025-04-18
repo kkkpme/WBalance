@@ -57,6 +57,7 @@ WBalance::WBalance(QWidget *parent)
 	voltageSD_flag = false;
 	sd_confirm_flag = false;
 	saveornot = true;
+	exit_flag = false;
 
 	zerolines.clear();
 	zero_rows_u_0.clear();
@@ -444,114 +445,6 @@ void WBalance::show_data(const QStringList &header, const MatrixXd &matri, QTabl
 	tableView->resizeRowsToContents();
 }
 
-QPair<vector<vector<double>>, vector<MatrixXd>> WBalance::correct_voltage(const MatrixXd &vol)
-{
-	//--25.3.4修改--用两个零载荷行计算的修正值，去修正它们之间所夹的行数据
-	int rowCount = 144;
-	int colCount = 6;
-	//修正值
-	int num = zerolines.size(); //零载荷行号组合数
-	vector<vector<double>> zero_u_0;
-	zero_u_0.clear();
-	zero_u_0 = vector<vector<double>>(colCount, vector<double>(num, 0.0)); //6*num个修正值
-
-	for (int i = 0; i < colCount; i++)
-	{
-		for (int j = 0; j < num; j++)
-		{
-			double sum = 0.0;
-			for (int k : zerolines[j])
-			{
-				sum += vol(k, i);
-			}
-			zero_u_0[i][j] = sum / zerolines[j].size();
-		}
-	}
-
-	//修正结果
-	vector<MatrixXd> u_0_list;
-	u_0_list.clear();
-	int matNum = vol.cols();
-
-	for (int i = 0; i < matNum; i++) //6列待修正电压
-	{
-		MatrixXd mat = vol.col(i);
-		MatrixXd delta_u_0(rowCount, 1);    //144*1
-		for (int j = 0; j < num; j++)       //每列有num个修正值，需要分成num组分别减去对应修正值
-		{
-			vector<int> zero = zerolines[j];
-			for (int k = zero[0]; k <= zero[1]; k++)
-			{
-				delta_u_0(k, 0) = mat(k, 0) - zero_u_0[i][j];
-			}
-		}
-		u_0_list.push_back(delta_u_0); //最后计算得到u_0_list包括6个144行的列向量
-	}
-
-	return QPair<vector<vector<double>>, vector<MatrixXd>>(zero_u_0, u_0_list); //返回修正值+修正结果
-}
-
-vector<MatrixXd> WBalance::compute_inde_variable(const vector<MatrixXd> &delta_u_i, const MatrixXd &f)
-{
-	int rowCount = delta_u_i[0].size();
-
-	vector<MatrixXd> py_one_infer;//一阶干扰项
-
-	for (int i = 0; i < f.cols(); i++)
-	{
-		MatrixXd a = f;
-		a.col(i) = delta_u_i[i]; //用delta_u_0_list按顺序替换掉a中的一列
-		py_one_infer.push_back(a); //得到6个144*6矩阵
-	}
-
-	MatrixXd py_two_infer(rowCount, 21); //二阶干扰项及交叉项
-	for (int i = 0; i < 6; i++) //py_two_infer前6项（列）：f中每一列每个元素的平方
-	{
-		py_two_infer.col(i) = f.col(i).array().square();
-	}
-
-	int index = 6;
-	for (int i = 0; i < 5; i++)//py_two_infer后15项（列）：第i列每个元素和第j（>i）列每个元素相乘
-	{
-		for (int j = i + 1; j < 6; j++)
-		{
-			py_two_infer.col(index++) = f.col(i).array() * f.col(j).array();
-		}
-	}
-
-	vector<MatrixXd> Ai; //自变量矩阵
-	for (int i = 0; i < 6; i++)
-	{
-		MatrixXd a(rowCount, py_one_infer[i].cols() + py_two_infer.cols()); //初始化144*27矩阵
-		a << py_one_infer[i], py_two_infer; //拼接矩阵[py_one_infer[i],py_two_infer]
-		Ai.push_back(a); //A：6个144*27矩阵
-	}
-	return Ai;
-}
-
-MatrixXd WBalance::compute_coefficient_Y(const vector<MatrixXd> &ai, const MatrixXd &f)
-{
-	vector<MatrixXd> X; //系数矩阵
-	for (int i = 0; i < 6; i++)
-	{
-		MatrixXd a = (ai[i].transpose() * ai[i]).inverse() * ai[i].transpose() * f.col(i);
-		X.push_back(a);
-	}
-
-	int rowCount = X[0].rows();//27
-	int colCount = X[0].cols();//1
-	MatrixXd mtx = MatrixXd::Zero(rowCount, colCount * X.size());
-
-	int colIdx = 0;
-	for (const auto& mat : X)
-	{
-		mtx.block(0, colIdx, rowCount, colCount) = mat; //遍历mtx中的每一个向量mat，并将其逐列拼接到mtx中，最后得到一个27*6的矩阵
-		colIdx++;
-	}
-
-	return mtx;
-}
-
 void WBalance::save_calibra_result(const QString &Path)
 {
 	//1.保存系数矩阵
@@ -708,206 +601,6 @@ void WBalance::save_calibra_result(const QString &Path)
 	{
 		QMessageBox::critical(this, tr("错误!"), tr("无法保存各分量对应的输入量到文件！"));
 	}
-}
-
-QPair<vector<MatrixXd>, vector<MatrixXd>> WBalance::data_sample()
-{
-	int num = 100000; //抽样次数
-	int row = 144;
-	int col = 6;
-	vector<MatrixXd> vol_results;
-	vector<MatrixXd> load_results;
-	random_device rd;
-	mt19937 gen(rd());
-
-	for (int k = 0; k < num; k++)
-	{
-		MatrixXd vol_temp_result = MatrixXd::Zero(row, col);
-		MatrixXd load_temp_result = MatrixXd::Zero(row, col);
-		for (int i = 0; i < row; i++)
-		{
-			//按行抽样
-			for (int j = 0; j < col; j++)
-			{
-				if (f_matrixSD(i, j) == 0.0)
-				{
-					load_temp_result(i, j) = f_matrix(i, j);
-				}
-				else
-				{
-					normal_distribution<double> load_normal_dist(f_matrix(i, j), fabs(f_matrixSD(i, j))); //载荷抽样
-					load_temp_result(i, j) = load_normal_dist(gen);
-				}
-
-				if (u_matrixSD(i, j) == 0.0)
-				{
-					vol_temp_result(i, j) = u_matrix(i, j);
-				}
-				else
-				{
-					normal_distribution<double> vol_normal_dist(u_matrix(i, j), fabs(u_matrixSD(i, j))); //电压抽样
-					vol_temp_result(i, j) = vol_normal_dist(gen);
-				}
-			}
-		}
-
-		if ((k + 1) % 10000 == 0)
-		{
-			int value = (k + 1) / 10000;
-			qDebug() << "value=" << value;
-			ui.progressBar_coffee->setValue(value);
-		}
-
-		vol_results.push_back(vol_temp_result);
-		load_results.push_back(load_temp_result);
-	}
-	qDebug() << "抽样完成";
-	/*QString name = "D:/M组电压抽样数据.txt";
-	QFile file(name);
-	if (!file.open(QIODevice::WriteOnly | QIODevice::Text))
-	{
-		qDebug() << "无法打开文件：" << name;
-		return QPair<vector<MatrixXd>, vector<MatrixXd>>();
-	}
-	QTextStream out(&file);
-	int n = 0;
-	for (const auto &matrices : vol_results)
-	{
-		out << tr("组合 #") << ++n << ":\n";
-
-		for (int i = 0; i < matrices.rows(); i++)
-		{
-			for (int j = 0; j < matrices.cols(); j++)
-			{
-				out << QString::number(matrices(i, j), 'f', 12) << " ";
-			}
-			out << "\n";
-		}
-		out << "\n";
-	}
-	file.close();
-	qDebug() << "电压抽样结果已保存到：" << name;
-
-	QString name2 = "G:/天平-代码调试/M组载荷抽样数据.txt";
-	QFile file2(name2);
-	if (!file2.open(QIODevice::WriteOnly | QIODevice::Text))
-	{
-		qDebug() << "无法打开文件：" << name;
-		return QPair<vector<MatrixXd>, vector<MatrixXd>>();
-	}
-	QTextStream out2(&file2);
-	int m = 0;
-	for (const auto& matrices : load_results)
-	{
-		for (int i = 0; i < matrices.rows(); i++)
-		{
-			for (int j = 0; j < matrices.cols(); j++)
-			{
-				out2 << QString::number(matrices(i, j), 'f', 12) << " ";
-			}
-			out2 << "\n";
-		}
-		out2 << "\n\n";
-	}
-	file2.close();
-	qDebug() << "载荷抽样结果已保存到：" << name2;*/
-
-	return QPair<vector<MatrixXd>, vector<MatrixXd>> (vol_results, load_results);
-}
-
-QPair<MatrixXd, MatrixXd> WBalance::cal_sample_results(const vector<MatrixXd> &vol, const vector<MatrixXd> &load)
-{
-	int M = vol.size();
-	vector<MatrixXd> coeffs(M, MatrixXd::Zero(27, 6));
-	MatrixXd vol_matri;
-	MatrixXd load_matri;
-
-	qDebug() << "cal_sample_results";
-	for (int i = 0; i < M; i++)
-	{
-		vol_matri = vol[i];
-		load_matri = load[i];
-
-		auto m = correct_voltage(vol_matri);  //修正电压，返回修正值和修正结果
-		zero_rows_u_0 = m.first;              //电压修正值
-		delta_u_0_list = m.second;            //电压修正结果
-
-		vector<MatrixXd> a_i = compute_inde_variable(delta_u_0_list, load_matri); //传入电压+载荷		
-		MatrixXd coeff = compute_coefficient_Y(a_i, load_matri);//等精度计算
-		coeffs[i] = coeff;
-
-		if (i % 1149 == 0)
-		{
-			int value = i / 1149 + 10;
-			qDebug() << "value=" << value;
-			ui.progressBar_coffee->setValue(value);
-		}
-	}
-
-	//QString name = "D:/M组系数.txt";
-	//QFile file(name);
-	//if (!file.open(QIODevice::WriteOnly | QIODevice::Text))
-	//{
-	//	qDebug() << "无法打开文件：" << name;
-	//	return QPair<MatrixXd, MatrixXd>();
-	//}
-
-	//QTextStream out(&file);
-
-	//for (const auto& matrices : coeffs)
-	//{
-	//	int matrixIndex = 0;
-
-	//	for (int i = 0; i < matrices.rows(); i++)
-	//	{
-	//		for (int j = 0; j < matrices.cols(); j++)
-	//		{
-	//			out << QString::number(matrices(i, j), 'f', 12) << " ";
-	//		}
-	//		out << "\n";
-	//	}
-	//}
-
-	//file.close();
-	//qDebug() << "系数已保存到：" << name;
-
-	MatrixXd error;
-	MatrixXd averg;
-	error = averg = MatrixXd::Zero(27, 6);
-
-	for (int i = 0; i < M; i++)
-	{
-		//M个系数矩阵
-		MatrixXd mat = coeffs[i];
-		averg += mat;
-	}
-	averg = averg / M; //平均值
-
-	ui.progressBar_coffee->setValue(98);
-
-	for (int i = 0; i < M; i++) //残差和
-	{
-		MatrixXd vi = (coeffs[i] - averg).array().square();
-		error += vi;
-	}
-
-	//标准不确定度
-	if (M <= 1)
-	{
-		qDebug() << "样本数小于1，无法计算标准不确定度";
-		return QPair<MatrixXd, MatrixXd>();
-	}
-	for (int i = 0; i < error.rows(); i++)
-	{
-		for (int j = 0; j < error.cols(); j++)
-		{
-			error(i, j) = qSqrt(error(i, j) / (M - 1));
-		}
-	}
-
-	ui.progressBar_coffee->setValue(99);
-
-	return QPair<MatrixXd, MatrixXd>(averg, error);
 }
 
 void WBalance::SelectFile_glist()
@@ -1086,33 +779,62 @@ void WBalance::read_sd_cofirm()
 	show_oncalibration();
 }
 
-void WBalance::coeff_evaluate()
-{	
-	qDebug() << "data_confirm_flag" << data_confirm_flag << endl << "sd_confirm_flag" << sd_confirm_flag;
-	if (!data_confirm_flag||!sd_confirm_flag)
+void WBalance::initThread()
+{
+	m_worker = new Worker(zerolines, f_matrix, f_matrixSD, u_matrix, u_matrixSD, load_header, 100000, nullptr);
+	m_thread = new QThread;
+
+	m_worker->moveToThread(m_thread);
+
+	//连接信号槽
+	connect(m_thread, &QThread::started, m_worker, &Worker::process);
+	connect(m_worker, &Worker::Progress, this, &WBalance::onProgress);
+	connect(m_worker, &Worker::finished, this, &WBalance::onWorkFinished);
+	connect(m_worker, &Worker::errorOccured, this, &WBalance::onWorkError);
+	connect(m_worker, &Worker::cancelled, this, &WBalance::onWorkCancelled);
+	//connect(m_worker, &Worker::finished, m_thread, &QThread::quit);
+	//connect(m_worker, &Worker::errorOccured, m_thread, &QThread::quit);
+	//connect(m_worker, &Worker::cancelled, m_thread, &QThread::quit); 
+	//connect(m_thread, &QThread::finished, m_worker, &QObject::deleteLater);
+	//connect(m_thread, &QThread::finished, m_thread, &QObject::deleteLater);
+	
+	//线程结束后，由主线程来 delete worker 和 thread
+	connect(m_thread, &QThread::finished, this, [this]() {
+		//在主线程上下文中安全 delete
+		m_worker->deleteLater();
+		m_thread->deleteLater();
+		m_worker = nullptr;
+		m_thread = nullptr;
+		});
+
+	//启动后台计算
+	m_thread->start();
+}
+
+void WBalance::onProgress(int v)
+{
+	ui.progressBar_coffee->setValue(v);
+}
+
+void WBalance::onWorkFinished(const MatrixXd& avg, const MatrixXd& err)
+{
+	coeff_average = avg;
+	coeff_error = err;
+
+	//不确定度-三分之一准则修约
+	for (int i = 0; i < coeff_error.rows(); i++)
 	{
-		QMessageBox::information(this, tr("提示"), tr("未确认文件！"));
-		return;
+		for (int j = 0; j < coeff_error.cols(); j++)
+		{
+			coeff_error(i, j) = ThirdRule(coeff_error(i, j));
+		}
 	}
 
-	//抽样计算-不去零行+等精度
-	const auto &sample_temp = data_sample();
-
-	qDebug() << "11111111111";
-
-	//voltage_sample_result = sample_temp.first;
-	//load_sample_result = sample_temp.second;
-
-	qDebug() << "22222222222";
-
-	const auto &results = cal_sample_results(sample_temp.first, sample_temp.second);
-	coeff_average = results.first;
-	coeff_error = results.second;
-
-	//1. 生成主项（6个）
+	/*-----生成表头-----
+	1. 生成主项（6个）*/
 	QStringList SDheader = load_header;
 	//2. 生成平方项（6个）
-	for (const QString &h : load_header)
+	for (const QString& h : load_header)
 	{
 		SDheader << h + "." + h;
 	}
@@ -1125,7 +847,7 @@ void WBalance::coeff_evaluate()
 		}
 	}
 
-	QStandardItemModel *model_avrg = new QStandardItemModel(27, 6, this);
+	QStandardItemModel* model_avrg = new QStandardItemModel(27, 6, this);
 	model_avrg->setVerticalHeaderLabels(SDheader);
 	model_avrg->setHorizontalHeaderLabels(load_header);
 
@@ -1133,13 +855,13 @@ void WBalance::coeff_evaluate()
 	{
 		for (int j = 0; j < coeff_average.cols(); j++)
 		{
-			QStandardItem *item = new QStandardItem(QString("%1").arg(coeff_average(i, j), 0, 'e', 4));
+			QStandardItem* item = new QStandardItem(QString("%1").arg(coeff_average(i, j), 0, 'e', 4));
 			model_avrg->setItem(i, j, item);
 		}
 	}
 	ui.tableView_cofe_averg->setModel(model_avrg);
-	
-	QStandardItemModel *model_std = new QStandardItemModel(27, 6, this);
+
+	QStandardItemModel* model_std = new QStandardItemModel(27, 6, this);
 	model_std->setVerticalHeaderLabels(SDheader);
 	model_std->setHorizontalHeaderLabels(load_header);
 
@@ -1147,14 +869,59 @@ void WBalance::coeff_evaluate()
 	{
 		for (int j = 0; j < coeff_error.cols(); j++)
 		{
-			QStandardItem *item = new QStandardItem(QString("%1").arg(coeff_error(i, j), 0, 'e', 4));
+			QStandardItem* item = new QStandardItem(QString("%1").arg(coeff_error(i, j), 0, 'e', 2));
 			model_std->setItem(i, j, item);
 		}
 	}
 	ui.tableView_cofe_std->setModel(model_std);
 
 	ui.progressBar_coffee->setValue(100);
-	QMessageBox::information(this, tr("提示"), tr("计算完成"));
+	QMessageBox::information(this, tr("提示"), tr("系数评估完成"));
+
+	//把按钮文字改回去
+	ui.pushButton_coeff_cal->setText(tr("评 估"));
+}
+
+void WBalance::onWorkError(const QString& msg)
+{
+	QMessageBox::critical(this, tr("计算错误"), msg);
+	ui.pushButton_coeff_cal->setText(tr("评 估"));
+}
+
+void WBalance::onWorkCancelled()
+{
+	//后台确认取消后，重置 UI
+	ui.progressBar_coffee->setValue(0);
+	if (!exit_flag)
+	{
+		QMessageBox::information(this, tr("提示"), tr("已取消系数评估"));
+	}
+}
+
+void WBalance::coeff_evaluate()
+{	
+	qDebug() << "data_confirm_flag" << data_confirm_flag << endl << "sd_confirm_flag" << sd_confirm_flag;
+	if (!data_confirm_flag||!sd_confirm_flag)
+	{
+		QMessageBox::information(this, tr("提示"), tr("未确认文件！"));
+		return;
+	}
+
+	if (ui.pushButton_coeff_cal->text() == tr("评 估"))
+	{
+		ui.pushButton_coeff_cal->setText(tr("取 消"));
+		initThread();
+	}
+	else if(ui.pushButton_coeff_cal->text() == tr("取 消"))
+	{
+		ui.pushButton_coeff_cal->setText(tr("评 估"));
+		if (m_thread && m_thread->isRunning()) 
+		{
+			m_thread->requestInterruption();
+			m_thread->quit();
+			m_thread->wait();
+		}
+	}
 }
 
 void WBalance::save_calibration()
@@ -1198,14 +965,14 @@ void WBalance::save_calibration()
 	}
 
 	//保存文件1：系数标准不确定度
-	if (!save_coeff_file(file1Path, coeff_error, tr("MCM方法-系数估计值标准不确定度"), headers2))
+	if (!save_coeff_file(file1Path, ui.tableView_cofe_std, tr("MCM方法-系数估计值标准不确定度"), headers2))
 	{
 		QMessageBox::critical(this, tr("错误"), tr("MCM方法-系数估计值标准不确定度保存失败！"));
 		return;
 	}
 
 	//保存文件2：系数估计值
-	if (!save_coeff_file(file2Path, coeff_average, tr("MCM方法-系数估计值"), headers2))
+	if (!save_coeff_file(file2Path, ui.tableView_cofe_averg, tr("MCM方法-系数估计值"), headers2))
 	{
 		QMessageBox::critical(this, tr("错误"), tr("MCM方法-系数估计值保存失败！"));
 		return;
@@ -1215,20 +982,25 @@ void WBalance::save_calibration()
 	QFile file3(file3Path);
 	if (file3.open(QIODevice::WriteOnly | QIODevice::Text))
 	{
+		QAbstractItemModel* model = ui.tableView_cofe_averg->model();
+		int rowCount = model->rowCount();
+		int colCount = model->columnCount();
+
 		QTextStream out(&file3);
 		out.setCodec("UTF-8");
 		out << "27   6\n";
 
-		for (int i = 0; i < coeff_average.rows(); ++i)
+		for (int i = 0; i < rowCount; ++i)
 		{
-			for (int j = 0; j < coeff_average.cols(); ++j)
+			for (int j = 0; j < colCount; ++j)
 			{
-				out << QString::asprintf("%12.4e", coeff_average(i, j));
-				if (j < coeff_average.cols() - 1)
-					out << " ";
+				QModelIndex index = model->index(i, j);
+				out << model->data(index).toString();
+				if (j < colCount - 1) out << QString(" ");
 			}
-			out << "\n";
+			out << QString("\n");
 		}
+
 		file3.close();
 	}
 	else
@@ -1240,16 +1012,23 @@ void WBalance::save_calibration()
 	ui.lineEdit_coff_path->setText(file3Path);
 	ui.lineEdit_coff_path_2->setText(file3Path);
 	ui.lineEdit_EV_save_path->setText(file3Path);
+	ui.lineEdit_SUEV_save_path->setText(file1Path);
 
 	QMessageBox::information(this, tr("提示"), tr("保存完成，文件目录为：")+ initialDir);
 }
 
 //新增的通用保存函数
-bool WBalance::save_coeff_file(const QString& path, const MatrixXd& data, const QString& title, const QStringList& headers)
+bool WBalance::save_coeff_file(const QString& path, QTableView *tableView, const QString& title, const QStringList& headers)
 {
 	QFile file(path);
 	if (!file.open(QIODevice::WriteOnly | QIODevice::Text))
 		return false;
+
+	QAbstractItemModel* model = tableView->model();
+	int rowCount = model->rowCount();
+	int colCount = model->columnCount();
+
+	qDebug() << "colCount" << colCount;
 
 	QTextStream out(&file);
 	out.setCodec("UTF-8");
@@ -1267,13 +1046,14 @@ bool WBalance::save_coeff_file(const QString& path, const MatrixXd& data, const 
 		<< QString("项目　＼　单元│") << headerLine << QString("\n")
 		<< QString("├───────┼────────────────────────────────────┤\n");
 
-	for (int i = 0; i < data.rows(); ++i)
+	for (int i = 0; i < rowCount; ++i)
 	{
 		out << QString("│ 　%1     │").arg(headers.value(i, "Unknown").left(6));
-		for (int j = 0; j < data.cols(); ++j)
+		for (int j = 0; j < colCount; ++j)
 		{
-			out << QString::asprintf("%12.4e", data(i, j));
-			if (j < data.cols() - 1) out << QString(" ");
+			QModelIndex index = model->index(i, j);
+			out << model->data(index).toString();
+			if (j < colCount - 1) out << QString(" ");
 		}
 		out << QString("│\n");
 	}
@@ -1283,8 +1063,6 @@ bool WBalance::save_coeff_file(const QString& path, const MatrixXd& data, const 
 
 	return true;
 }
-
-
 
 void WBalance::show_choosefile()
 {
@@ -1330,12 +1108,12 @@ void WBalance::help()
 	}
 }
 
-QString WBalance::read_data00()
+QString WBalance::read_data00(QLineEdit *LineEdit)
 {
 	QString filePath = QFileDialog::getOpenFileName(this, tr("选择文件"));
 	if (!filePath.isEmpty())
 	{
-		ui.lineEdit_data00_path->setText(filePath);
+		LineEdit->setText(filePath);
 	}
 	else
 	{
@@ -1344,11 +1122,12 @@ QString WBalance::read_data00()
 	return filePath;
 }
 
-QString WBalance::ThirdRule(double input)
+double WBalance::ThirdRule(double input)
 {
 	//0 特殊处理
 	if (input == 0.0)
-		return QStringLiteral("0.00");
+		return 0.00;
+		//return QStringLiteral("0.00");
 
 	bool isNegative = input < 0.0;
 	double absVal = fabs(input);
@@ -1378,17 +1157,19 @@ QString WBalance::ThirdRule(double input)
 
 	//6) 恢复符号
 	double result = isNegative ? -truncatedValue : truncatedValue;
-	//重新计算 exponent
-	int exponent_2 = static_cast<int>(floor(log10(fabs(result))));
-	//小数位数 = max(0, 2 - exponent)
-	int decimals = qMax(0, 2 - exponent_2);
-	//'f' 保证补 0
-	return QString::number(result, 'f', decimals);
+
+	////重新计算 exponent
+	//int exponent_2 = static_cast<int>(floor(log10(fabs(result))));
+	////小数位数 = max(0, 2 - exponent)
+	//int decimals = qMax(0, 2 - exponent_2);
+	////'f' 保证补 0
+	//return QString::number(result, 'f', decimals);
+	return result;
 }
 
 void WBalance::show_data00()
 {
-	QString filePath_data00 = read_data00();
+	QString filePath_data00 = read_data00(ui.lineEdit_data00_path);
 	if (!QFile::exists(filePath_data00))
 	{
 		QMessageBox::critical(this, tr("错误！"), tr("未找到文件路径！"));
@@ -1427,16 +1208,60 @@ void WBalance::show_data00()
 	ui.tableView_show_data00->setModel(model);
 	ui.tableView_show_data00->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
 	ui.tableView_show_data00->resizeRowsToContents();
+}
 
-	//QMessageBox::information(this, tr("提示"), tr("data00文件读取成功"));
+void WBalance::show_load00()
+{
+	QString filePath_load00 = read_data00(ui.lineEdit_load00_path);
+	if (!QFile::exists(filePath_load00))
+	{
+		QMessageBox::critical(this, tr("错误！"), tr("未找到文件路径！"));
+		return;
+	}
+
+	auto temp = read_file(filePath_load00);
+	bool flag = temp.ok;
+
+	QStringList header = temp.headers;
+	qDebug() << header;
+
+	if (!flag)
+	{
+		qDebug() << "读取失败！";
+		return;
+	}
+
+	MatrixXd data00 = temp.data;
+	int rowCount = data00.rows();
+	int colCount = data00.cols();
+
+	QStandardItemModel* model = new QStandardItemModel(rowCount, colCount, this);
+	model->setHorizontalHeaderLabels(header);
+
+	for (int i = 0; i < rowCount; ++i)
+	{
+		for (int j = 0; j < colCount; ++j)
+		{
+			QString snValue = QString::number(data00(i, j), 'f', 8).replace(QRegularExpression("\\.?0+$"), "");
+			QStandardItem* item = new QStandardItem(snValue);
+			model->setItem(i, j, item);
+		}
+	}
+
+	ui.tableView_show_load00->setModel(model);
+	ui.tableView_show_load00->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
+	ui.tableView_show_load00->resizeRowsToContents();
 }
 
 void WBalance::compute_repeat_result()
 {
 	string filePath_coff = ui.lineEdit_coff_path->text().toStdString();
 	string filePath_data00 = ui.lineEdit_data00_path->text().toStdString();
+	//QFileInfo fileInfo(ui.lineEdit_data00_path->text());
+	//QString filePath_load00_qstring = fileInfo.absolutePath() + "/" + "load00.dat";
+	string filePath_load00 = ui.lineEdit_load00_path->text().toStdString();
 
-	if (filePath_data00.empty() || filePath_coff.empty())
+	if (filePath_data00.empty() || filePath_coff.empty() || filePath_load00.empty())
 	{
 		QMessageBox::warning(this, tr("输入错误"), tr("请确保文件路径已正确输入！"));
 		return;
@@ -1444,7 +1269,7 @@ void WBalance::compute_repeat_result()
 
 	try {
 		//数据处理函数_Result
-		pair<map<int, vector<double>>, vector<map<int, vector<double>>>> result = _Result(filePath_data00, filePath_coff);
+		pair<map<int, vector<double>>, vector<map<int, vector<double>>>> result = _Result(filePath_data00, filePath_coff, filePath_load00);
 		MatrixXd iteration = map_to_mat(result.first);
 
 		vector<string> tableHeader = readFirstLine(filePath_data00);
@@ -1476,12 +1301,31 @@ void WBalance::compute_repeat_result()
 			}
 		}
 
+		//设置全局样式表
+		ui.tableView_show_data00_result->setStyleSheet(
+			//表格整体背景色（包括非视口区域）
+			"QTableView {"
+			"   background-color: white;"
+			"}"
+			//表头（行表头和列表头）背景色
+			"QHeaderView {"
+			"   background-color: white;"
+			"}"
+			//视口（数据区域）背景色
+			"QTableView::viewport {"
+			"   background-color: white;"
+			"}"
+			//角落控件（行表头和列表头交汇处）背景色
+			"QTableView QTableCornerButton::section {"
+			"   background-color: white;"
+			"}"
+		);
 		ui.tableView_show_data00_result->setModel(model);
 		ui.tableView_show_data00_result->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
 		ui.tableView_show_data00_result->resizeRowsToContents();
 
 		//评估
-		vector<Stats> cfx_result = cfx(filePath_data00, filePath_coff);
+		vector<Stats> cfx_result = cfx(filePath_data00, filePath_load00, filePath_coff);
 		if (cfx_result.empty())
 		{
 			QMessageBox::critical(this, tr("计算错误"), tr("评估结果为空，请检查输入数据！"));
@@ -1498,15 +1342,29 @@ void WBalance::compute_repeat_result()
 		for (int col = 0; col < header.size(); ++col) 
 		{
 			//三分之一准则
-			QString value = ThirdRule(cfx_result[col].stddev);
+			QString value = QString::number(ThirdRule(cfx_result[col].stddev));
 
 			QStandardItem* originalItem = new QStandardItem(value);
 			model_2->setItem(0, col, originalItem);
 
-			QString value_2 = ThirdRule(2.0 * cfx_result[col].stddev); //k=2
+			QString value_2 = QString::number(ThirdRule(2.0 * cfx_result[col].stddev)); //k=2
 			QStandardItem* uncertaintyItem = new QStandardItem(value_2);
 			model_2->setItem(1, col, uncertaintyItem);
 		}
+
+		ui.tableView_show00_result->setStyleSheet(
+			"QTableView {"
+			"   background-color: white;"
+			"}"
+			"QHeaderView {"
+			"   background-color: white;"
+			"}"
+			"QTableView::viewport {"
+			"   background-color: white;"
+			"}"
+			"QTableView QTableCornerButton::section {"
+			"   background-color: white;"
+			"}");
 
 		ui.tableView_show00_result->setModel(model_2);
 		ui.tableView_show00_result->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
@@ -1623,6 +1481,7 @@ void WBalance::save_comprehen_cfx()
 		QTextStream out(&file_show00);
 		out << content_show00;
 		file_show00.close();
+		ui.lineEdit_UCLR_save_path->setText(file2Path);
 		QMessageBox::information(this, tr("成功"), tr("评估结果文件保存成功"));
 	}
 	else
@@ -1965,9 +1824,19 @@ void WBalance::compute_comprehen()
 	string filePath_load01 = ui.lineEdit_load01_path->text().toStdString();
 	string filePath_data01 = ui.lineEdit_data01_path_2->text().toStdString();
 	string filePath_coff = ui.lineEdit_coff_path_2->text().toStdString();
+	QFileInfo fi(ui.lineEdit_data01_path_2->text());
+	QString qs = fi.absolutePath() + "/" + tr("计算准度.xlsx");
+	string savePath_excel = qs.toStdString();
 
-	pair<map<int, vector<double>>, vector<map<int, vector<double>>>> result = _Result(filePath_data01, filePath_coff);
+	pair<map<int, vector<double>>, vector<map<int, vector<double>>>> result = _Result(filePath_data01, filePath_coff, filePath_load01);
 	MatrixXd iteration = map_to_mat(result.first);
+
+	map<int, vector<double>> load02 = datalines(filePath_load01).first;
+	MatrixXd load02_mat = map_to_mat(load02);
+
+	MatrixXd rela_erro = relative_error(iteration,load02_mat);
+
+	save_excel(iteration,load02_mat,rela_erro, savePath_excel);
 
 	//先设置表头
 	vector<string> tableHeader = readFirstLine(filePath_load01);
@@ -1993,6 +1862,21 @@ void WBalance::compute_comprehen()
 			model->setItem(row, col, item);
 		}
 	}
+
+	ui.tableView_iteration_out->setStyleSheet(
+		"QTableView {"
+		"   background-color: white;"
+		"}"
+		"QHeaderView {"
+		"   background-color: white;"
+		"}"
+		"QTableView::viewport {"
+		"   background-color: white;"
+		"}"
+		"QTableView QTableCornerButton::section {"
+		"   background-color: white;"
+		"}");
+
 	ui.tableView_iteration_out->setModel(model);
 	ui.tableView_iteration_out->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
 	ui.tableView_iteration_out->resizeRowsToContents();
@@ -2003,36 +1887,51 @@ void WBalance::compute_comprehen()
 
 		auto save_third_nums = [](double input)
 		{
-			bool isNegative = input < 0.0;
-			double absVal = std::fabs(input);
+				//0 特殊处理
+				if (input == 0.0)
+					return QStringLiteral("0.00");
 
-			//1) 先截断到 3 位小数
-			double truncated = std::floor(absVal * 1000.0) / 1000.0;
+				bool isNegative = input < 0.0;
+				double absVal = fabs(input);
 
-			//2) 计算 value_2 = 原始值 - truncated
-			double value_2 = absVal - truncated;
+				//1) 计算数量级 exponent（input≈ m × 10^exponent，m∈[1,10)）
+				int exponent = static_cast<int>(floor(log10(absVal)));
 
-			//3) 固定 value_1 = 0.001
-			const double value_1 = 0.001;
+				//2) 计算保留 3 位有效数字时的“基本单位” scale = 10^(exponent-2)
+				//（这样 m×10^exponent / scale = m×10^2，即保留 3 位整数 m×10^2）
+				double scale = pow(10.0, exponent - 2);
 
-			//4) 计算 value_3 = value_1 / 3
-			const double value_3 = value_1 / 3.0; // ≈ 0.0003333333
+				//3) 截断到 3 位有效数字：truncatedMultiple = ⌊absVal/scale⌋
+				double truncatedMultiple = floor(absVal / scale);
+				double truncatedValue = truncatedMultiple * scale;
 
-			//5) 决定是否进位
-			double result = truncated;
-			if (value_2 >= value_3)
-			{
-				result += value_1;
-			}
+				//4) 计算剩余 value_2
+				double value_2 = absVal - truncatedValue;
 
-			//恢复符号
-			if (isNegative) result = -result;
-			return result;
+				//5) “三分之一准则”：value_1=scale, value_3=scale/3
+				double value_1 = scale;
+				double value_3 = value_1 / 3.0;
+				if (value_2 >= value_3)
+				{
+					truncatedMultiple += 1.0;
+					truncatedValue = truncatedMultiple * scale;
+				}
+
+				//6) 恢复符号
+				double result = isNegative ? -truncatedValue : truncatedValue;
+				//重新计算 exponent
+				int exponent_2 = static_cast<int>(floor(log10(fabs(result))));
+				//小数位数 = max(0, 2 - exponent)
+				int decimals = qMax(0, 2 - exponent_2);
+				//'f' 保证补 0
+				return QString::number(result, 'f', decimals);
 		};
 
-		vector<double> method1_result_new;
+		vector<QString> method1_result_new;
+		vector<double> method_result_new_nums;
 		for (auto& it : method1_result)
 		{
+			method_result_new_nums.push_back(it);
 			method1_result_new.push_back(save_third_nums(it));
 		}
 
@@ -2051,16 +1950,31 @@ void WBalance::compute_comprehen()
 			{
 				if (i == 0)
 				{
-					QStandardItem* item1 = new QStandardItem(QString::number(method1_result_new[j]));
+					QStandardItem* item1 = new QStandardItem(method1_result_new[j]);
 					model1->setItem(i, j, item1);
 				}
 				else if (i == 1)
 				{
-					QStandardItem* item1 = new QStandardItem(QString::number(2 * method1_result_new[j]));
+					QStandardItem* item1 = new QStandardItem(save_third_nums(2 * method_result_new_nums[j]));
 					model1->setItem(i, j, item1);
 				}
 			}
 		}
+
+		ui.tableView_comprehen_err_ass->setStyleSheet(
+			"QTableView {"
+			"   background-color: white;"
+			"}"
+			"QHeaderView {"
+			"   background-color: white;"
+			"}"
+			"QTableView::viewport {"
+			"   background-color: white;"
+			"}"
+			"QTableView QTableCornerButton::section {"
+			"   background-color: white;"
+			"}");
+
 		ui.tableView_comprehen_err_ass->setModel(model1);
 		ui.tableView_comprehen_err_ass->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
 		ui.tableView_comprehen_err_ass->resizeRowsToContents();
@@ -2088,6 +2002,21 @@ void WBalance::compute_comprehen()
 				model2->setItem(row, col, item2);
 			}
 		}
+
+		ui.tableView_comprehen_66->setStyleSheet(
+			"QTableView {"
+			"   background-color: white;"
+			"}"
+			"QHeaderView {"
+			"   background-color: white;"
+			"}"
+			"QTableView::viewport {"
+			"   background-color: white;"
+			"}"
+			"QTableView QTableCornerButton::section {"
+			"   background-color: white;"
+			"}");
+
 		ui.tableView_comprehen_66->setModel(model2);
 		ui.tableView_comprehen_66->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
 		ui.tableView_comprehen_66->resizeRowsToContents();
@@ -2840,6 +2769,15 @@ void WBalance::closeEvent(QCloseEvent* event)
 	//根据用户点击的按钮决定是否退出
 	if (msgBox.clickedButton() == btnYes) 
 	{
+		exit_flag = true;
+
+		//在关闭前，如果后台线程还在，强制终止
+		if (m_thread && m_thread->isRunning()) 
+		{
+			m_thread->requestInterruption();
+			m_thread->quit();  //结束事件循环（如果有的话）
+			m_thread->wait();  //阻塞直到真正退出
+		}
 		event->accept(); //允许关闭窗口
 	}
 	else 

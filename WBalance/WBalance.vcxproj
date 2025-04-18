@@ -38,12 +38,12 @@
   </ImportGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x64'" Label="QtSettings">
     <QtInstall>5.14.2_msvc2017_64</QtInstall>
-    <QtModules>core;sql;network;gui;axcontainer;widgets;network;gui;widgets</QtModules>
+    <QtModules>core;sql;network;gui;axcontainer;widgets</QtModules>
     <QtBuildConfig>debug</QtBuildConfig>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x64'" Label="QtSettings">
     <QtInstall>5.14.2_msvc2017_64</QtInstall>
-    <QtModules>core;sql;network;gui;axcontainer;widgets;gui;widgets</QtModules>
+    <QtModules>core;sql;network;gui;axcontainer;widgets</QtModules>
     <QtBuildConfig>release</QtBuildConfig>
   </PropertyGroup>
   <Target Name="QtMsBuildNotFound" BeforeTargets="CustomBuild;ClCompile" Condition="!Exists('$(QtMsBuild)\qt.targets') or !Exists('$(QtMsBuild)\qt.props')">
@@ -61,15 +61,15 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x64'">
-    <IncludePath>E:\Application\Eigen\eigen-3.4.0;E:\QT\QTanzhuangdaoci\5.14.2\msvc2017_64\bin</IncludePath>
+    <IncludePath>E:\QT\QTanzhuangdaoci\5.14.2\msvc2017_64\bin;E:\Application\Eigen\eigen-3.4.0;E:\Application\Libxl\libxl-4.1.1\include_cpp</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x64'">
-    <IncludePath>D:\software\Eigen\eigen-3.4.0;D:\software\qt\5.14.2\msvc2017_64</IncludePath>
+    <IncludePath>E:\QT\QTanzhuangdaoci\5.14.2\msvc2017_64\bin;E:\Application\Eigen\eigen-3.4.0;E:\Application\Libxl\libxl-4.1.1\include_cpp</IncludePath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <Link>
-      <AdditionalLibraryDirectories>E:\QT\QTanzhuangdaoci\5.14.2\msvc2017_64\lib\cmake;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>E:\QT\QTanzhuangdaoci\5.14.2\msvc2017_64\lib\cmake;E:\Application\Libxl\libxl-4.1.1\lib64;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>libxl.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <ClCompile />
     <ClCompile>
@@ -78,8 +78,8 @@
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <Link>
-      <AdditionalLibraryDirectories>E:\QT\QTanzhuangdaoci\5.14.2\msvc2017_64\lib\cmake;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>E:\QT\QTanzhuangdaoci\5.14.2\msvc2017_64\lib\cmake;E:\Application\Libxl\libxl-4.1.1\lib64;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>libxl.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <ClCompile>
       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
@@ -106,16 +106,20 @@
       <Optimization>MaxSpeed</Optimization>
     </ClCompile>
     <Link>
-      <SubSystem>Console</SubSystem>
+      <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Worker.cpp" />
     <QtRcc Include="WBalance.qrc" />
     <QtUic Include="WBalance.ui" />
     <QtMoc Include="WBalance.h" />
     <ClCompile Include="WBalance.cpp" />
     <ClCompile Include="main.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <QtMoc Include="Worker.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Condition="Exists('$(QtMsBuild)\qt.targets')">

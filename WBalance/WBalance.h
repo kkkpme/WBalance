@@ -2,12 +2,10 @@
 
 #include <QtWidgets/QMainWindow>
 #include "ui_WBalance.h"
-#include <Eigen/Dense>
-#include <Eigen/Core>
+#include "Worker.h"
 #include <QAxObject>
 #include <QCloseEvent>
-using namespace std;
-using namespace Eigen;
+#include <QThread>
 
 class WBalance : public QMainWindow
 {
@@ -58,23 +56,20 @@ public:
 
     MatrixXd read_tableview(QTableView *tableView); //读取表格数据
     QPair<bool, vector<vector<int>>> find_zeroRows_index(const QString &glistFilePath);           //搜索加载表中的零行
-    QPair<vector<vector<double>>, vector<MatrixXd>> correct_voltage(const MatrixXd &vol);         //修正电压
-    vector<MatrixXd> compute_inde_variable(const vector<MatrixXd> &delta_u_i, const MatrixXd &f); //计算自变量矩阵
-    MatrixXd compute_coefficient_Y(const vector<MatrixXd> &ai, const MatrixXd &f);                //等精度最小二乘计算系数
-    void save_calibra_result(const QString &Path); //保存校准过程结果
+    void save_calibra_result(const QString &Path); //保存校准中间结果
 
     //系数评估，从144*12每一个数据的分布中抽样
     vector<MatrixXd> voltage_sample_result;  //电压抽样结果，M*144*6
     vector<MatrixXd> load_sample_result;     //载荷抽样结果，M*144*6
     MatrixXd coeff_average;                  //估计值，27*6
     MatrixXd coeff_error;                    //不确定度，27*6
+    bool exit_flag;
 
-    QPair<vector<MatrixXd>, vector<MatrixXd>> data_sample(); //抽样
-    QPair<MatrixXd, MatrixXd> cal_sample_results(const vector<MatrixXd> &vol, const vector<MatrixXd> &load); //计算估计值和标准不确定度
-    bool save_coeff_file(const QString& path, const MatrixXd& data, const QString& title, const QStringList& headers);
+    void initThread();
+    bool save_coeff_file(const QString& path, QTableView *tableView, const QString& title, const QStringList& headers);
 
-    QString read_data00();
-    QString ThirdRule(double data);
+    QString read_data00(QLineEdit* LineEdit);
+    double ThirdRule(double data);
 
     void read_load01_data();
     void read_data01_data();
@@ -91,6 +86,9 @@ public:
 
 private:
     Ui::WBalanceClass ui;
+
+    QThread *m_thread{ nullptr };
+    Worker *m_worker{ nullptr };
 
 protected:
     void closeEvent(QCloseEvent *event) override; //重写关闭事件
@@ -112,9 +110,16 @@ private slots:
     void read_sd_cofirm();        //确认标准差文件选择
 
     void coeff_evaluate();        //模型校准槽函数
+    void onProgress(int);         //更新进度条
+    void onWorkFinished(const MatrixXd& avg, const MatrixXd& err); //线程计算结束，返回结果
+    void onWorkError(const QString&);
+    void onWorkCancelled();
+
     void save_calibration();      //保存校准结果
 
     void show_data00();           //重复性-读取data00文件
+    void show_load00();           //重复性-读取load00文件
+
     void compute_repeat_result(); //重复性-评估
     void save_comprehen_cfx();    //重复性-结果保存
 

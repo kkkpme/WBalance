@@ -1,7 +1,6 @@
 //迭代过程
 #include<cmath>
-#include "../eigen-3.4.0/Eigen/Dense"
-#include "../eigen-3.4.0/Eigen/Core"
+#include<Eigen/Dense>
 #include<vector>
 #include<map>
 #include <string>
@@ -12,8 +11,45 @@
 #include <tuple>
 #include <sstream>
 #include <filesystem>
+#include "libxl.h"
+
 using namespace std;
 using namespace Eigen;
+using namespace libxl;
+
+static int it_nums = 7;
+
+MatrixXd map_to_mat(map<int ,vector<double>> &data)//将map<int ,vector<double>>数据转化为MatrixXd数据
+{
+    int rowCount = data.size();
+    int colCount = data.begin()->second.size();
+    MatrixXd result(rowCount, colCount);
+    int index = 0;
+    for (const auto& pair : data) 
+    {
+        for (int j = 0; j < colCount; j++) 
+        {
+            result(index, j) = pair.second[j];
+        }
+        index++;
+    }
+    return result;
+}
+
+map<int ,vector<double>> mat_to_map(MatrixXd &m)
+{
+    map<int,vector<double>> result;
+    for(int i = 0;  i < m.rows(); ++i)
+    {
+        vector<double> tmp(m.cols());
+        for(int j =0;j<m.cols();++j)
+        {
+            tmp[j] = m(i,j);
+        }
+        result.emplace(i, std::move(tmp));
+    }
+    return result;
+}
 
 vector<string> readFirstLine(const string&filePath)
 { 
@@ -276,7 +312,17 @@ map<int, vector<double>> func_f (vector<double> Y)//计算干扰项的自变量�
     return m1;//返回自变量矩阵
 }
 
-map<int, vector<double>> diedai(map<int, vector<double>> coff,vector<double> U)
+int get_col_num(map<int, vector<double>> &data)//获取列数
+{
+    int col_num = 0;
+    for(auto& it:data.begin()->second)
+    {
+        col_num++;
+    }
+    return col_num;
+}
+
+map<int, vector<double>> diedai(map<int, vector<double>> coff,vector<double> U,const string& loadFilePath)
 {
     /*
     coff：6*27个系数
@@ -302,72 +348,114 @@ map<int, vector<double>> diedai(map<int, vector<double>> coff,vector<double> U)
     //迭代过程
     map<int, vector<double>> Y_i;//存放迭代结果
 
-    vector <double> sum(6,0);//每个载荷的干扰项值
-    map<int, vector<double>> x = func_f(Y_0);//利用Y_0计算出自变量矩阵
-    // print_result(x);//打印自变量矩阵
-    // cout<<"==================================================================================="<<endl;
-    vector<double> tmp;
-    for (int i=0;i<6;i++)
-    {
-        for (int j=0;j<tmp_coff[i].size();j++)
-        {
-            sum[i] += x[i][j] * tmp_coff[i][j] ;//将自变量与对应的系数相乘得到各载荷的干扰项值
-        }
-        tmp.push_back(Y_0[i] + sum[i]);
-    }
-    // cout<<"sum: "<<sum[0]<<" "<<sum[1]<<" "<<sum[2]<<" "<<sum[3]<<" "<<sum[4]<<" "<<sum[5]<<endl;
-    // cout<<"tmp: "<<tmp[0]<<" "<<tmp[1]<<" "<<tmp[2]<<" "<<tmp[3]<<" "<<tmp[4]<<" "<<tmp[5]<<endl;
-    // cout<<"==================================================================================="<<endl;
-    Y_i[0] = tmp;//第一次迭代结果
+    //这是气动院李小刚提供的迭代方法
+    map<int,vector<double>> load_data = datalines(loadFilePath).first;//读载荷数据
+    int col_num = get_col_num(load_data);//获取列数
 
-    for(int i=0;i<6;i++)//上面已经迭代一次了，这里再迭代6次
+    for(auto& it:load_data)
     {
-        vector<double> sum1(6,0);
-        map<int, vector<double>> x = func_f(Y_i[i]);//使用上一次的载荷计算下一次的自变量矩阵
-        vector<double> tmp1;
-        for (int j=0;j<6;j++)
+        vector<double> sum(col_num,0);
+        map<int,vector<double>> x = func_f(it.second);//计算干扰项的自变量
+        vector<double> tmp(col_num,0);
+        for (int i=0;i<col_num;i++)
         {
-            for (int k=0;k<tmp_coff[j].size();k++)
+            for (int j=0;j<tmp_coff[i].size();j++)
             {
-                sum1[j] += x[j][k] * tmp_coff[j][k] ;
+                sum[i] += x[i][j] * tmp_coff[i][j] ;//将自变量与对应的系数相乘得到各载荷的干扰项值
             }
-            tmp1.push_back(Y_0[j] + sum1[j]);
+            tmp[i] = Y_0[i] + sum[i];
         }
-        // cout<<"sum: "<<sum1[0]<<" "<<sum1[1]<<" "<<sum1[2]<<" "<<sum1[3]<<" "<<sum1[4]<<" "<<sum1[5]<<endl;
-        // cout<<"tmp: "<<tmp1[0]<<" "<<tmp1[1]<<" "<<tmp1[2]<<" "<<tmp1[3]<<" "<<tmp1[4]<<" "<<tmp1[5]<<endl;
-        // cout<<"==================================================================================="<<endl;
-        Y_i[i+1] = tmp1;
+        Y_i[0] = tmp;
+
+        for(int i=0;i<(it_nums-1);i++)//上面已经迭代一次了，这里再迭代6次
+        {
+            vector<double> sum1(6,0);
+            map<int, vector<double>> x = func_f(Y_i[i]);//使用上一次的载荷计算下一次的自变量矩阵
+            vector<double> tmp1;
+            for (int j=0;j<6;j++)
+            {
+                for (int k=0;k<tmp_coff[j].size();k++)
+                {
+                    sum1[j] += x[j][k] * tmp_coff[j][k] ;
+                }
+                tmp1.push_back(Y_0[j] + sum1[j]);
+            }
+            // cout<<"sum: "<<sum1[0]<<" "<<sum1[1]<<" "<<sum1[2]<<" "<<sum1[3]<<" "<<sum1[4]<<" "<<sum1[5]<<endl;
+            // cout<<"tmp: "<<tmp1[0]<<" "<<tmp1[1]<<" "<<tmp1[2]<<" "<<tmp1[3]<<" "<<tmp1[4]<<" "<<tmp1[5]<<endl;
+            // cout<<"==================================================================================="<<endl;
+            Y_i[i+1] = tmp1;
+        }
     }
+    //这是气动院李小刚提供的迭代方法
+    
+    // vector <double> sum(6,0);//每个载荷的干扰项值
+    // map<int, vector<double>> x = func_f(Y_0);//利用Y_0计算出自变量矩阵
+    // // print_result(x);//打印自变量矩阵
+    // // cout<<"==================================================================================="<<endl;
+    // vector<double> tmp;
+    // for (int i=0;i<6;i++)
+    // {
+    //     for (int j=0;j<tmp_coff[i].size();j++)
+    //     {
+    //         sum[i] += x[i][j] * tmp_coff[i][j] ;//将自变量与对应的系数相乘得到各载荷的干扰项值
+    //     }
+    //     tmp.push_back(Y_0[i] + sum[i]);
+    // }
+    // // cout<<"sum: "<<sum[0]<<" "<<sum[1]<<" "<<sum[2]<<" "<<sum[3]<<" "<<sum[4]<<" "<<sum[5]<<endl;
+    // // cout<<"tmp: "<<tmp[0]<<" "<<tmp[1]<<" "<<tmp[2]<<" "<<tmp[3]<<" "<<tmp[4]<<" "<<tmp[5]<<endl;
+    // // cout<<"==================================================================================="<<endl;
+    // Y_i[0] = tmp;//第一次迭代结果
+
+    // for(int i=0;i<(it_nums-1);i++)//上面已经迭代一次了，这里再迭代6次
+    // {
+    //     vector<double> sum1(6,0);
+    //     map<int, vector<double>> x = func_f(Y_i[i]);//使用上一次的载荷计算下一次的自变量矩阵
+    //     vector<double> tmp1;
+    //     for (int j=0;j<6;j++)
+    //     {
+    //         for (int k=0;k<tmp_coff[j].size();k++)
+    //         {
+    //             sum1[j] += x[j][k] * tmp_coff[j][k] ;
+    //         }
+    //         tmp1.push_back(Y_0[j] + sum1[j]);
+    //     }
+    //     // cout<<"sum: "<<sum1[0]<<" "<<sum1[1]<<" "<<sum1[2]<<" "<<sum1[3]<<" "<<sum1[4]<<" "<<sum1[5]<<endl;
+    //     // cout<<"tmp: "<<tmp1[0]<<" "<<tmp1[1]<<" "<<tmp1[2]<<" "<<tmp1[3]<<" "<<tmp1[4]<<" "<<tmp1[5]<<endl;
+    //     // cout<<"==================================================================================="<<endl;
+    //     Y_i[i+1] = tmp1;
+    // }
 
     return Y_i;//返回迭代结果
 }
 
-
-
 /*电压修正函数*/
 map<int, vector<double>> fix_u(map<int, vector<double>> &data,map<int, vector<double>> &zero_load_data_u)//data是待修正电压
 {
-    vector<double> zero_U(6,0);//0载荷电压平均值，用于修正
-    for(int i=0;i<6;i++)
-    {
-        double sum = 0;
-        for(auto& it:zero_load_data_u)
-        {
-            sum += it.second[i];
-        }
-        zero_U[i] = sum/zero_load_data_u.size();
-    }
-    for(int j=0;j<6;j++)
-    {
-        for(auto&it :data)
-        {
-            it.second[j] -= zero_U[j];
-        }
-    }
-    return data;
+    // vector<double> zero_U(6,0);//0载荷电压平均值，用于修正
+    // for(int i=0;i<6;i++)
+    // {
+    //     double sum = 0;
+    //     for(auto& it:zero_load_data_u)
+    //     {
+    //         sum += it.second[i];
+    //     }
+    //     zero_U[i] = sum/zero_load_data_u.size();
+    // }
+    // for(int j=0;j<6;j++)
+    // {
+    //     for(auto&it :data)
+    //     {
+    //         it.second[j] -= zero_U[j];
+    //     }
+    // }
+    // return data;
+    MatrixXd data_mat = map_to_mat(data);
+    MatrixXd zero_load_data_u_mat = map_to_mat(zero_load_data_u).topRows(data_mat.rows());
+    MatrixXd result = data_mat - zero_load_data_u_mat;
+    return mat_to_map(result);
 }
 
-pair<map<int ,vector<double>>,vector<map<int ,vector<double>>>> _Result(string dataFilePath,string coffFilePath)//给出迭代结果
+pair<map<int ,vector<double>>,vector<map<int ,vector<double>>>> _Result(string& dataFilePath,string& coffFilePath,string& loadFilePath)//给出迭代结果
 {
     vector<map<int ,vector<double>>> result_all;//存放迭代最终结果
     map<int, vector<double>> result_seven; 
@@ -377,9 +465,9 @@ pair<map<int ,vector<double>>,vector<map<int ,vector<double>>>> _Result(string d
     for (auto& it:data_xz)
     {
         vector<double> U = it.second;
-        map<int, vector<double>> Y_i = diedai(coff,U);
+        map<int, vector<double>> Y_i = diedai(coff,U,loadFilePath);
         result_all.push_back(Y_i);
-        result_seven[it.first] = Y_i[6];
+        result_seven[it.first] = Y_i.rbegin()->second;
     }
     return make_pair(result_seven, result_all);
 }
@@ -448,37 +536,32 @@ std::vector<Stats> calculateColumnStats(const std::map<int, std::vector<double>>
     return results;
 }
 
-vector<Stats> cfx(string dataFilePath,string coffFilePath)//data00
+vector<Stats> cfx(string &dataFilePath,string &loadFilePath,string &coffFilePath)//data00
 {
-    pair<map<int ,vector<double>>,vector<map<int ,vector<double>>>> diedai_result= _Result(dataFilePath,coffFilePath);
+    pair<map<int ,vector<double>>,vector<map<int ,vector<double>>>> diedai_result= _Result(dataFilePath,coffFilePath,loadFilePath);
     map<int ,vector<double>> result_seven= diedai_result.first;//7次迭代结果的第7次结果
     vector<Stats> cfx_r = calculateColumnStats(result_seven);//计算6分量的均值和标准差
     return cfx_r;
 }
 
-MatrixXd map_to_mat(map<int ,vector<double>> &data)//将map<int ,vector<double>>数据转化为MatrixXd数据
-{
-    int rowCount = data.size();
-    int colCount = data.begin()->second.size();
-    MatrixXd result(rowCount, colCount);
-    int index = 0;
-    for (const auto& pair : data) 
-    {
-        for (int j = 0; j < colCount; j++) 
-        {
-            result(index, j) = pair.second[j];
-        }
-        index++;
-    }
-    return result;
-}
-
 MatrixXd compute_66_matrix(string &dataFilePath,string &loadFilePath,string &coffFilePath)//计算66矩阵
 {
-    pair<map<int ,vector<double>>,vector<map<int ,vector<double>>>> diedai_result= _Result(dataFilePath,coffFilePath);
+    /*
+    (1) 行首：
+    系数矩阵 c 的每一行对应于自变量矩阵 result_seven_m 的某一列。换句话说，行首表示的是：
+    自变量矩阵中某个特征（或维度）对所有因变量的回归系数。
+    (2) 列首：
+    系数矩阵 c 的每一列对应于因变量矩阵 delta_f 的某一列。换句话说，列首表示的是：
+    
+    总结：
+    行首：表示自变量矩阵 result_seven_m 的列索引（即自变量特征）。
+    列首：表示因变量矩阵 delta_f 的列索引（即因变量特征）。
+    */
+    pair<map<int ,vector<double>>,vector<map<int ,vector<double>>>> diedai_result= _Result(dataFilePath,coffFilePath,loadFilePath);
     map<int ,vector<double>> result_seven= diedai_result.first;//7次迭代结果的第7次结果
     MatrixXd result_seven_m = map_to_mat(result_seven);//迭代结果矩阵，也是自变量矩阵
-    
+    //fix_matrix_to_significant_digits(result_seven_m, 5);
+
     pair<map<int, vector<double>>,map<int, vector<double>>> data = datalines(loadFilePath);
     map<int, vector<double>> data00_f = data.first;//非0载荷数据
     MatrixXd data00_f_m = map_to_mat(data00_f);//加载矩阵
@@ -489,10 +572,9 @@ MatrixXd compute_66_matrix(string &dataFilePath,string &loadFilePath,string &cof
     {
         c.col(i) = (result_seven_m.transpose()*result_seven_m).inverse()*result_seven_m.transpose()*delta_f.col(i);
     }
-    return c;
+    return c.transpose();
 }
 // 计算每一列的均值和标准差（vector 为行）
-
 
 void printResult(const std::pair<std::map<int, std::vector<double>>, std::vector<std::map<int, std::vector<double>>>>& result) {
     // 打印第一个元素：map<int, vector<double>>
@@ -500,7 +582,8 @@ void printResult(const std::pair<std::map<int, std::vector<double>>, std::vector
     for (const auto& elem : result.first) {
         std::cout << "Key: " << elem.first << ", Values: ";
         for (double val : elem.second) {
-            std::cout <<fixed<<setprecision(4)<< val << " ";
+            //std::cout <<fixed<<setprecision(2)<< val << " ";
+            std::cout <<setprecision(5)<< val << " ";
         }
         std::cout << "\n";
     }
@@ -522,7 +605,7 @@ void printResult(const std::pair<std::map<int, std::vector<double>>, std::vector
 
 vector<double> A2244(string &dataFilePath,string &loadFilePath,string &coffFilePath)
 {
-    pair<map<int ,vector<double>>,vector<map<int ,vector<double>>>> diedai_result= _Result(dataFilePath,coffFilePath);
+    pair<map<int ,vector<double>>,vector<map<int ,vector<double>>>> diedai_result= _Result(dataFilePath,coffFilePath,loadFilePath);
     map<int ,vector<double>> result_seven= diedai_result.first;//7次迭代结果的第7次结果
     MatrixXd result_seven_m = map_to_mat(result_seven);//迭代结果矩阵，也是自变量矩阵
     
@@ -544,7 +627,6 @@ vector<double> A2244(string &dataFilePath,string &loadFilePath,string &coffFileP
     return result;
 }
 
-
 MatrixXd relative_error(MatrixXd &a,MatrixXd &b)
 {
     MatrixXd resuls = MatrixXd::Zero(a.rows(),a.cols());
@@ -552,47 +634,66 @@ MatrixXd relative_error(MatrixXd &a,MatrixXd &b)
     {
         for(int col = 0;col<a.cols();++col)
         {
-            resuls(row,col) = (a(row,col)-b(row,col))/b(row,col)*100;
+            resuls(row,col) = (a(row,col)-b(row,col))/b(row,col);
         }
     }
     return resuls;
 }
 
+/*
+* 	libxl::Book* book = xlCreateXMLBook();
+	book->setKey(L"libxl", L"windows-28232b0208c4ee0369ba6e68abv6v5i3");//libxl 4.11
+*/
+
+void save_excel( MatrixXd& it_result, MatrixXd& load02_mat, MatrixXd& rela_erro,  string& saveFilePath)
+{
+    std::filesystem::path fsPath;
+    fsPath = std::filesystem::u8path(saveFilePath);
+
+    libxl::Book* book = xlCreateXMLBookW();
+    book->setKey(L"libxl", L"windows-28232b0208c4ee0369ba6e68abv6v5i3");//libxl 4.11
+
+    if (book)
+    {
+        libxl::Sheet* sheet = book->addSheet(L"sheet0");
+        if (sheet)
+        {
+            libxl::Format* formatPercentage = book->addFormat();
+            formatPercentage->setNumFormat(NUMFORMAT_PERCENT_D2); // 设置百分比格式，保留两位小数
+
+            libxl::Format* formatPercentage1 = book->addFormat();
+            formatPercentage1->setNumFormat(NUMFORMAT_NUMBER_D2); //保留两位小数
+            sheet->writeStr(0, 0,L"itration_result");
+            sheet->writeStr(0,7,L"load_data");
+            for (int row = 0; row < it_result.rows(); ++row)
+            {
+                for (int col = 0; col < it_result.cols(); ++col)
+                {
+                    sheet->writeNum(row+1,col,it_result(row,col), formatPercentage1);
+                    sheet->writeNum(row+1,col+it_result.cols()+1,load02_mat(row,col));
+                    sheet->writeNum(row+1,col+2*it_result.cols()+2,rela_erro(row,col), formatPercentage);
+                }
+            }
+        }
+        book->save(fsPath.c_str());
+    }
+    book->release();
+}
+
 
 //int main()
 //{
-//    string dataFilePath = "F:/toHFUT/third/data02.dat";
-//   // auto data = read_all_data(dataFilePath);
-//   // print_result(data);
-//    //string coffFilePath = "F:/toHFUT_V2/chose_method/delete_zero_unequal.txt";
-//    string coffFilePath = "F:/toHFUT/third/coff.dat";
-//    string loadFilePath = "F:/toHFUT/third/load02.dat";
-//    // auto d1 = datalines(dataFilePath);
-//    // auto d2 = coffdata(coffFilePath);
-//    // auto d3 = datalines(loadFilePath);
-//
-//    auto m = compute_66_matrix(dataFilePath,loadFilePath,coffFilePath);
-//    cout<<m<<endl;
-//
-//
-//
-//    // MatrixXd mat_result_seven = map_to_mat(result.first);
-//    // pair<map<int, vector<double>>, map<int, vector<double>>> data = datalines(dataFilePath);
-//    // MatrixXd mat_data_f = map_to_mat(data.first);
-//    // cout<<mat_data_f<<endl;
-//    // cout<<relative_error(mat_result_seven,mat_data_f)<<endl;
-//
-//
-//    // pair<map<int, vector<double>>,map<int, vector<double>>> data = datalines(dataFilePath);//读数据文件
-//    // map<int ,vector<double>> data_xz = fix_u(data.first,data.second);//修正电压值
-//    // map<int, vector<double>> coff = coffdata(coffFilePath);//6*27
-//    // vector<double> U = data_xz[0];
-//    // map<int, vector<double>> Y_i = diedai(coff,U);
-//
-//    // map<int, vector<double>> r = func_f(data.first[0]);
-//
-//    // MatrixXd mat_r = map_to_mat(r);
-//    // cout<<mat_r.row(0).transpose()<<endl;
-//
+//   // libxl::Book* book = xlCreateXMLBook();
+//    //book->setKey(L"libxl", L"windows-28232b0208c4ee0369ba6e68abv6v5i3");//libxl 4.11
+//    string saveFile = "F:/toHFUT_V2/third/计算准度.xlsx";
+//    string coffFile = "F:/toHFUT_V2/third/coff.dat";
+//    string load02File = "F:/toHFUT_V2/third/load02.dat";
+//    string data02File = "F:/toHFUT_V2/third/data02.dat";
+//    auto it_result = _Result(data02File,coffFile,load02File).first;
+//    map<int,vector<double>> load02 = datalines(load02File).first;
+//    MatrixXd load02_mat = map_to_mat(load02);
+//    MatrixXd it_result_mat = map_to_mat(it_result);
+//    MatrixXd rela_erro = relative_error(it_result_mat,load02_mat);
+//    save_excel(it_result_mat,load02_mat,rela_erro,saveFile);
 //    return 0;
 //}
