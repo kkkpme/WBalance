@@ -81,8 +81,8 @@ public:
     QStringList readTextFile(const QString& filePath);
     void fillTableWithData(QAxObject* table, const QStringList& data, int startRow, int startCol);
     void insertTextByBookmark(QAxObject* document, const QString& bookmarkName, const QString& text);
-    bool isNumeric(const QString& str);
-    bool isFileLocked(const QString& filePath);
+   /* bool isNumeric(const QString& str);
+    bool isFileLocked(const QString& filePath);*/
 
 private:
     Ui::WBalanceClass ui;
@@ -124,5 +124,6 @@ private slots:
     void save_comprehen_cfx();    //重复性-结果保存
 
     void btnSaveClicked();        //输出报告
+    void insetTechnicalData();    //导入有关技术数据
 };
 

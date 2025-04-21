@@ -70,7 +70,7 @@
      </font>
     </property>
     <property name="currentIndex">
-     <number>3</number>
+     <number>7</number>
     </property>
     <widget class="QWidget" name="page_1">
      <widget class="QComboBox" name="comboBox_b_type">
@@ -2524,7 +2524,6 @@
       </property>
       <property name="font">
        <font>
-        <family>Agency FB</family>
         <pointsize>11</pointsize>
        </font>
       </property>
@@ -3239,7 +3238,6 @@
       </property>
       <property name="font">
        <font>
-        <family>Agency FB</family>
         <pointsize>11</pointsize>
        </font>
       </property>
@@ -5131,7 +5129,6 @@
       </property>
       <property name="font">
        <font>
-        <family>Agency FB</family>
         <pointsize>11</pointsize>
        </font>
       </property>
@@ -6146,7 +6143,7 @@
        </font>
       </property>
       <property name="text">
-       <string>&gt;&gt; 综合加载误差评估—数据分析</string>
+       <string>&gt;&gt; 综合加载误差评估—数据读取</string>
       </property>
      </widget>
      <widget class="QLabel" name="label_117">
@@ -6770,7 +6767,7 @@
         <x>600</x>
         <y>690</y>
         <width>90</width>
-        <height>31</height>
+        <height>35</height>
        </rect>
       </property>
       <property name="palette">
@@ -7574,7 +7571,6 @@
       </property>
       <property name="font">
        <font>
-        <family>Agency FB</family>
         <pointsize>11</pointsize>
        </font>
       </property>
@@ -8143,6 +8139,7 @@
       </property>
       <property name="font">
        <font>
+        <family>Times New Roman</family>
         <pointsize>11</pointsize>
        </font>
       </property>
@@ -8186,7 +8183,7 @@
        </font>
       </property>
       <property name="text">
-       <string>另选文件</string>
+       <string>另选</string>
       </property>
      </widget>
      <widget class="QLineEdit" name="lineEdit_SUEV_save_path">
@@ -8200,6 +8197,7 @@
       </property>
       <property name="font">
        <font>
+        <family>Times New Roman</family>
         <pointsize>11</pointsize>
        </font>
       </property>
@@ -8221,6 +8219,7 @@
       </property>
       <property name="font">
        <font>
+        <family>Times New Roman</family>
         <pointsize>11</pointsize>
        </font>
       </property>
@@ -8248,7 +8247,7 @@
        </font>
       </property>
       <property name="text">
-       <string>另选文件</string>
+       <string>另选</string>
       </property>
      </widget>
      <widget class="QLabel" name="labelCL">
@@ -8446,6 +8445,7 @@
       </property>
       <property name="font">
        <font>
+        <family>Times New Roman</family>
         <pointsize>11</pointsize>
        </font>
       </property>
@@ -8488,6 +8488,7 @@
       </property>
       <property name="font">
        <font>
+        <family>Times New Roman</family>
         <pointsize>11</pointsize>
        </font>
       </property>
@@ -8506,6 +8507,7 @@
       </property>
       <property name="font">
        <font>
+        <family>Times New Roman</family>
         <pointsize>11</pointsize>
        </font>
       </property>
@@ -8560,9 +8562,9 @@
       <property name="geometry">
        <rect>
         <x>590</x>
-        <y>690</y>
+        <y>680</y>
         <width>111</width>
-        <height>31</height>
+        <height>41</height>
        </rect>
       </property>
       <property name="palette">
@@ -8685,6 +8687,7 @@
       </property>
       <property name="font">
        <font>
+        <family>Times New Roman</family>
         <pointsize>11</pointsize>
        </font>
       </property>
@@ -8712,7 +8715,7 @@
        </font>
       </property>
       <property name="text">
-       <string>另选文件</string>
+       <string>另选</string>
       </property>
      </widget>
      <widget class="QLabel" name="labelCLError">
@@ -8789,7 +8792,7 @@
        </font>
       </property>
       <property name="text">
-       <string>另选文件</string>
+       <string>另选</string>
       </property>
      </widget>
      <widget class="QProgressBar" name="progressBar">
@@ -8798,7 +8801,7 @@
         <x>50</x>
         <y>660</y>
         <width>1221</width>
-        <height>20</height>
+        <height>8</height>
        </rect>
       </property>
       <property name="font">
@@ -8811,7 +8814,7 @@
        <number>30</number>
       </property>
       <property name="textVisible">
-       <bool>true</bool>
+       <bool>false</bool>
       </property>
       <property name="textDirection">
        <enum>QProgressBar::BottomToTop</enum>
@@ -8848,6 +8851,7 @@
       </property>
       <property name="font">
        <font>
+        <family>Times New Roman</family>
         <pointsize>11</pointsize>
        </font>
       </property>
@@ -8930,6 +8934,7 @@
       </property>
       <property name="font">
        <font>
+        <family>Times New Roman</family>
         <pointsize>11</pointsize>
        </font>
       </property>
@@ -9022,11 +9027,32 @@
       </property>
       <property name="font">
        <font>
+        <family>Times New Roman</family>
         <pointsize>11</pointsize>
        </font>
       </property>
       <property name="text">
        <string/>
+      </property>
+     </widget>
+     <widget class="QPushButton" name="pushButton_inset">
+      <property name="geometry">
+       <rect>
+        <x>1180</x>
+        <y>90</y>
+        <width>91</width>
+        <height>30</height>
+       </rect>
+      </property>
+      <property name="font">
+       <font>
+        <pointsize>11</pointsize>
+        <weight>50</weight>
+        <bold>false</bold>
+       </font>
+      </property>
+      <property name="text">
+       <string>导入数据</string>
       </property>
      </widget>
     </widget>

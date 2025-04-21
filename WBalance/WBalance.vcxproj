@@ -68,7 +68,7 @@
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <Link>
-      <AdditionalLibraryDirectories>E:\QT\QTanzhuangdaoci\5.14.2\msvc2017_64\lib\cmake;E:\Application\Libxl\libxl-4.1.1\lib64;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>E:\Application\Libxl\libxl-4.1.1\lib64</AdditionalLibraryDirectories>
       <AdditionalDependencies>libxl.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <ClCompile />
@@ -78,7 +78,7 @@
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <Link>
-      <AdditionalLibraryDirectories>E:\QT\QTanzhuangdaoci\5.14.2\msvc2017_64\lib\cmake;E:\Application\Libxl\libxl-4.1.1\lib64;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>E:\Application\Libxl\libxl-4.1.1\lib64</AdditionalLibraryDirectories>
       <AdditionalDependencies>libxl.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <ClCompile>

@@ -180,13 +180,14 @@ WBalance::WBalance(QWidget *parent)
 		[this]() { handleFileSelection(ui.lineEdit_SUEV_save_path); });
 
 	//待马璇师姐完成后加入
-	/*connect(ui.pushButton_choose_UCLR, &QPushButton::clicked, this,
-		[this]() { handleFileSelection(ui.lineEdit_UCLR_save_path); });*/
+	connect(ui.pushButton_choose_UCLR, &QPushButton::clicked, this,
+		[this]() { handleFileSelection(ui.lineEdit_UCLR_save_path); });
 
 	connect(ui.pushButton_choose_CLE, &QPushButton::clicked, this,
 		[this]() { handleFileSelection(ui.lineEdit_CLE_save_path); });
 
 	connect(ui.pushButton_report_save, &QPushButton::clicked, this, &WBalance::btnSaveClicked);
+	connect(ui.pushButton_inset, &QPushButton::clicked, this, &WBalance::insetTechnicalData);
 
 }
 
@@ -786,29 +787,21 @@ void WBalance::initThread()
 
 	m_worker->moveToThread(m_thread);
 
-	//连接信号槽
 	connect(m_thread, &QThread::started, m_worker, &Worker::process);
 	connect(m_worker, &Worker::Progress, this, &WBalance::onProgress);
 	connect(m_worker, &Worker::finished, this, &WBalance::onWorkFinished);
 	connect(m_worker, &Worker::errorOccured, this, &WBalance::onWorkError);
 	connect(m_worker, &Worker::cancelled, this, &WBalance::onWorkCancelled);
-	//connect(m_worker, &Worker::finished, m_thread, &QThread::quit);
-	//connect(m_worker, &Worker::errorOccured, m_thread, &QThread::quit);
-	//connect(m_worker, &Worker::cancelled, m_thread, &QThread::quit); 
-	//connect(m_thread, &QThread::finished, m_worker, &QObject::deleteLater);
-	//connect(m_thread, &QThread::finished, m_thread, &QObject::deleteLater);
 	
-	//线程结束后，由主线程来 delete worker 和 thread
+	//线程结束后，由主线程来delete worker和thread,以防止析构顺序等错误
 	connect(m_thread, &QThread::finished, this, [this]() {
-		//在主线程上下文中安全 delete
 		m_worker->deleteLater();
 		m_thread->deleteLater();
 		m_worker = nullptr;
 		m_thread = nullptr;
 		});
-
-	//启动后台计算
-	m_thread->start();
+	
+	m_thread->start(); //启动后台计算
 }
 
 void WBalance::onProgress(int v)
@@ -986,21 +979,37 @@ void WBalance::save_calibration()
 		int rowCount = model->rowCount();
 		int colCount = model->columnCount();
 
+		//计算每列最大宽度
+		QVector<int> colWidths(colCount, 0);
+		for (int col = 0; col < colCount; ++col) 
+		{
+			for (int row = 0; row < rowCount; ++row) 
+			{
+				const QString text = model->data(model->index(row, col)).toString();
+				colWidths[col] = qMax(colWidths[col], text.length());
+			}
+			//至少保留3字符宽度（根据需求调整）
+			colWidths[col] = qMax(colWidths[col], 3);
+		}
+
 		QTextStream out(&file3);
 		out.setCodec("UTF-8");
-		out << "27   6\n";
+		out.setRealNumberNotation(QTextStream::FixedNotation);
 
-		for (int i = 0; i < rowCount; ++i)
+		out << QString("27   6\n");
+
+		//按对齐格式写入数据
+		for (int row = 0; row < rowCount; ++row) 
 		{
-			for (int j = 0; j < colCount; ++j)
+			for (int col = 0; col < colCount; ++col) 
 			{
-				QModelIndex index = model->index(i, j);
-				out << model->data(index).toString();
-				if (j < colCount - 1) out << QString(" ");
+				const QModelIndex index = model->index(row, col);
+				//右对齐，用空格填充宽度
+				out << QString("%1").arg(model->data(index).toString(), colWidths[col], QChar(' '));
+				if (col < colCount - 1) out << QString("  ");  //列间保留2个空格
 			}
 			out << QString("\n");
 		}
-
 		file3.close();
 	}
 	else
@@ -1017,7 +1026,6 @@ void WBalance::save_calibration()
 	QMessageBox::information(this, tr("提示"), tr("保存完成，文件目录为：")+ initialDir);
 }
 
-//新增的通用保存函数
 bool WBalance::save_coeff_file(const QString& path, QTableView *tableView, const QString& title, const QStringList& headers)
 {
 	QFile file(path);
@@ -1048,12 +1056,12 @@ bool WBalance::save_coeff_file(const QString& path, QTableView *tableView, const
 
 	for (int i = 0; i < rowCount; ++i)
 	{
-		out << QString("│ 　%1     │").arg(headers.value(i, "Unknown").left(6));
+		out << QString("│ 　%1     │ ").arg(headers.value(i, "Unknown").left(6));
 		for (int j = 0; j < colCount; ++j)
 		{
 			QModelIndex index = model->index(i, j);
 			out << model->data(index).toString();
-			if (j < colCount - 1) out << QString(" ");
+			if (j < colCount - 1) out << QString("  ");
 		}
 		out << QString("│\n");
 	}
@@ -1127,26 +1135,24 @@ double WBalance::ThirdRule(double input)
 	//0 特殊处理
 	if (input == 0.0)
 		return 0.00;
-		//return QStringLiteral("0.00");
 
 	bool isNegative = input < 0.0;
 	double absVal = fabs(input);
 
-	//1) 计算数量级 exponent（input≈ m × 10^exponent，m∈[1,10)）
+	//1)计算数量级 exponent（input≈ m × 10^exponent，m∈[1,10)）
 	int exponent = static_cast<int>(floor(log10(absVal)));
 
-	//2) 计算保留 3 位有效数字时的“基本单位” scale = 10^(exponent-2)
-	//（这样 m×10^exponent / scale = m×10^2，即保留 3 位整数 m×10^2）
+	//2)计算保留 3 位有效数字时的“基本单位” scale = 10^(exponent-2)
 	double scale = pow(10.0, exponent - 2);
 
-	//3) 截断到 3 位有效数字：truncatedMultiple = ⌊absVal/scale⌋
-	double truncatedMultiple = floor(absVal / scale);
+	//3)截断到 3 位有效数字：truncatedMultiple = absVal/scale
+	double truncatedMultiple = floor(absVal / scale); //获取三位有效数字的整数部分
 	double truncatedValue = truncatedMultiple * scale;
 
-	//4) 计算剩余 value_2
+	//4)计算剩余 value_2
 	double value_2 = absVal - truncatedValue;
 
-	//5) “三分之一准则”：value_1=scale, value_3=scale/3
+	//5)“三分之一准则”：value_1=scale, value_3=scale/3
 	double value_1 = scale;
 	double value_3 = value_1 / 3.0;
 	if (value_2 >= value_3) 
@@ -1155,15 +1161,9 @@ double WBalance::ThirdRule(double input)
 		truncatedValue = truncatedMultiple * scale;
 	}
 
-	//6) 恢复符号
+	//6)恢复符号
 	double result = isNegative ? -truncatedValue : truncatedValue;
 
-	////重新计算 exponent
-	//int exponent_2 = static_cast<int>(floor(log10(fabs(result))));
-	////小数位数 = max(0, 2 - exponent)
-	//int decimals = qMax(0, 2 - exponent_2);
-	////'f' 保证补 0
-	//return QString::number(result, 'f', decimals);
 	return result;
 }
 
@@ -1257,8 +1257,6 @@ void WBalance::compute_repeat_result()
 {
 	string filePath_coff = ui.lineEdit_coff_path->text().toStdString();
 	string filePath_data00 = ui.lineEdit_data00_path->text().toStdString();
-	//QFileInfo fileInfo(ui.lineEdit_data00_path->text());
-	//QString filePath_load00_qstring = fileInfo.absolutePath() + "/" + "load00.dat";
 	string filePath_load00 = ui.lineEdit_load00_path->text().toStdString();
 
 	if (filePath_data00.empty() || filePath_coff.empty() || filePath_load00.empty())
@@ -1272,14 +1270,14 @@ void WBalance::compute_repeat_result()
 		pair<map<int, vector<double>>, vector<map<int, vector<double>>>> result = _Result(filePath_data00, filePath_coff, filePath_load00);
 		MatrixXd iteration = map_to_mat(result.first);
 
-		vector<string> tableHeader = readFirstLine(filePath_data00);
+		vector<string> tableHeader = readFirstLine(filePath_load00);
 		QStringList header;
 		for (const auto& v : tableHeader)
 		{
 			header.append(QString::fromStdString(v));
 		}
 
-		header.replaceInStrings(QRegularExpression("^U"), "");
+		//header.replaceInStrings(QRegularExpression("^U"), "");
 
 		//创建并填充数据模型
 		QStandardItemModel* model = new QStandardItemModel();
@@ -1404,11 +1402,11 @@ void WBalance::save_comprehen_cfx()
 	}
 
 	QString content;
-	content += "\t" + horizontalHeaders.join("\t") + "\n"; // 添加水平表头
+	content += "\t" + horizontalHeaders.join("\t") + "\n"; //添加水平表头
 
 	for (int row = 0; row < rowCount; ++row)
 	{
-		content += verticalHeaders[row] + "\t"; // 添加垂直表头
+		content += verticalHeaders[row] + "\t"; //添加垂直表头
 		for (int col = 0; col < colCount; ++col)
 		{
 			QModelIndex index = model->index(row, col);
@@ -2390,15 +2388,16 @@ void WBalance::btnSaveClicked()
 	QString b_number_8 = name_last + "-" + date_NP;
 	ui.lineEdit_b_number_8->setText(b_number_8);
 
-
+	QString exePath = QCoreApplication::applicationDirPath();
+	qDebug() << "The path of the executable file is: " << exePath;
 	QString templatePath = "";
 	if (ui.checkBox_method1->isChecked())
 	{
-		templatePath = "G:/Wind_tunnel_balance/ALL/输出报告-设计稿-方案1.dotx";
+		templatePath = exePath+"/输出报告-设计稿-方案1.dotx";
 	}
 	if (ui.checkBox_method1_2->isChecked())
 	{
-		templatePath = "G:/Wind_tunnel_balance/ALL/输出报告-设计稿-方案2.dotx";
+		templatePath = exePath+"/输出报告-设计稿-方案2.dotx";
 	}
 	qDebug() << templatePath;
 	if (templatePath.isEmpty())
@@ -2464,12 +2463,12 @@ void WBalance::btnSaveClicked()
 		ui.progressBar->setVisible(false);
 		return;
 	}
-	/*QStringList data4 = readTextFile(ui.lineEdit_UCLR_save_path->text());
+	QStringList data4 = readTextFile(ui.lineEdit_UCLR_save_path->text());
 	if (data4.isEmpty())
 	{
 		ui.progressBar->setVisible(false);
 		return;
-	}*/
+	}
 	QStringList data5 = readTextFile(ui.lineEdit_CLE_save_path->text());
 	if (data5.isEmpty())
 	{
@@ -2558,7 +2557,7 @@ void WBalance::btnSaveClicked()
 	fillTableWithData(table2.get(), data2, 2, 2);
 	ui.progressBar->setValue(85);
 	fillTableWithData(table3.get(), data3, 2, 2);
-	//fillTableWithData(table4.get(), data4, 2, 2);
+	fillTableWithData(table4.get(), data4, 2, 2);
 	fillTableWithData(table5.get(), data5, 2, 2);
 
 
@@ -2603,46 +2602,104 @@ QStringList  WBalance::readTextFile(const QString& filePath)
 	lines.removeFirst();
 
 
-   /*
-   QStringList data;
-   for (int i = 0; i < lines.size(); ++i)
-	 {
-		 QString line = lines[i];
-		 QString newLine = line.left(line.length() - 1);
-		 QStringList parts = newLine.split(' ', Qt::SkipEmptyParts);
-		 for (int j = 0; j < parts.size(); ++j)
-		 {
-			 QString part = parts[j];
-			 if (isNumeric(part))
-			 {
-				 data.append(part);
-			 }
-		 }
-	 }*/
-
 	QStringList data;
 	for (int i = 0; i < lines.size(); ++i)
 	{
 		QString line = lines[i];
-		//qDebug() << line;
-		QString newLine = line.left(line.length() - 1);
-		QTextStream stream(&newLine);
-		QString part;
-		while (!stream.atEnd())
+		QRegularExpression regex("[ \\t]+");
+		QStringList parts = line.split(regex, Qt::SkipEmptyParts);
+		for (int j = 0; j < parts.size(); ++j)
 		{
-			stream >> part;
-			if (isNumeric(part))
+
+			QString part = parts[j];
+			bool ok;
+			part.toDouble(&ok);
+			if (ok)
 			{
-			//	qDebug() << part;
 				data.append(part);
 			}
+			else
+			{
+				QString trimmed = part;
+				while (!trimmed.isEmpty() && !ok)
+				{
+					trimmed.chop(1);
+					trimmed.toDouble(&ok);
+					if (ok)
+					{
+						data.append(trimmed);
+					}
+
+				}
+			}
+
 		}
-
 	}
-	//qDebug() << "结束                  1111111111111111111111111111111111111111111111111111111111111      ";
 	return data;
-}
+	//  QStringList data;
+	//  for (int i = 0; i < lines.size(); ++i)
+	   // {
+	   //	 QString line = lines[i];
+	   //	 QString newLine = line.left(line.length() - 1);
+	   //	 QStringList parts = newLine.split(' ', Qt::SkipEmptyParts);
+	   //	 for (int j = 0; j < parts.size(); ++j)
+	   //	 {
+	   //		 QString part = parts[j];
+	   //		 if (isNumeric(part))
+	   //		 {
+	   //			 data.append(part);
+	   //		 }
+	   //	 }
+	   // }
 
+	   //QStringList data;
+	   //for (int i = 0; i < lines.size(); ++i)
+	   //{
+	   //	QString line = lines[i];
+	   //	//qDebug() << line;
+	   //	QString newLine = line.left(line.length() - 1);
+	   //	QTextStream stream(&newLine);
+	   //	QString part;
+	   //	while (!stream.atEnd())
+	   //	{
+	   //		stream >> part;
+	   //		if (isNumeric(part))
+	   //		{
+	   //		//	qDebug() << part;
+	   //			data.append(part);
+	   //		}
+	   //	}
+
+	   //}
+	   //
+	   //return data;
+}
+//读取给定的技术数据，并显示在表格中
+void WBalance::insetTechnicalData()
+{
+	QString TecDataPath = QFileDialog::getOpenFileName(this, "选择技术数据文件", "", "所有文件 (*.*)");
+	QStringList TecData = readTextFile(TecDataPath);
+	int index = 0;
+	for (int row = 0; row < 2; ++row)
+	{
+		for (int col = 0; col < 6; ++col)
+		{
+			if (index < TecData.size())
+			{
+				// 创建表格项
+				QTableWidgetItem* item1 = new QTableWidgetItem(TecData.at(index));
+				// 将表格项设置到指定单元格
+				ui.TableWidget_b->setItem(row, col, item1);
+				index++;
+			}
+			else
+			{
+				break;
+			}
+		}
+	}
+
+}
 // 填充表格数据
 void WBalance::fillTableWithData(QAxObject* table, const QStringList& data, int startRow, int startCol)
 {
@@ -2730,20 +2787,20 @@ void WBalance::insertTextByBookmark(QAxObject* document, const QString& bookmark
 }
 
 
-// 判断字符串是否为数字
-bool WBalance::isNumeric(const QString& str)
-{
-	bool ok;
-	str.toDouble(&ok);
-	return ok;
-}
-
-//判断保持的文件是否被占用
-bool WBalance::isFileLocked(const QString& filePath)
-{
-	QFile file(filePath);
-	return !file.open(QIODevice::WriteOnly | QIODevice::Append);
-}
+//// 判断字符串是否为数字
+//bool WBalance::isNumeric(const QString& str)
+//{
+//	bool ok;
+//	str.toDouble(&ok);
+//	return ok;
+//}
+//
+////判断保持的文件是否被占用
+//bool WBalance::isFileLocked(const QString& filePath)
+//{
+//	QFile file(filePath);
+//	return !file.open(QIODevice::WriteOnly | QIODevice::Append);
+//}
 
 void WBalance::quit()
 {

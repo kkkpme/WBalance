@@ -48,15 +48,15 @@ public:
 
 
 public slots:
-    //线程启动后会自动调用
-    void process();
+    
+    void process();//线程启动后会自动调用
 
 signals:
    
     void Progress(int value);    
    
-    //全部完成：传回平均系数和标准不确定度
-    void finished(Eigen::MatrixXd averageCoeff, Eigen::MatrixXd errorCoeff);
+    
+    void finished(Eigen::MatrixXd averageCoeff, Eigen::MatrixXd errorCoeff);//传回平均系数和标准不确定度
     void errorOccured(const QString& errMsg);
     void cancelled();
 

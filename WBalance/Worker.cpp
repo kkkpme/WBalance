@@ -304,7 +304,6 @@ void Worker::process()
 {
     try
     {
-        //第一步：抽样
         auto samples = data_sample();
         if (QThread::currentThread()->isInterruptionRequested()) 
         {
@@ -313,7 +312,6 @@ void Worker::process()
         }
         emit Progress(10);
 
-        //第二步：系数计算
         auto results = cal_sample_results(samples.first, samples.second);
         if (QThread::currentThread()->isInterruptionRequested()) 
         {
@@ -322,7 +320,6 @@ void Worker::process()
         }
         emit Progress(99);
 
-        //完成
         emit finished(results.first, results.second);
     }
     catch (std::exception& ex)

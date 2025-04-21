@@ -1,13 +1,13 @@
 /********************************************************************************
-** Form generated from reading UI file 'WBalancehUojgS.ui'
+** Form generated from reading UI file 'WBalancevQLykf.ui'
 **
 ** Created by: Qt User Interface Compiler version 5.14.2
 **
 ** WARNING! All changes made in this file will be lost when recompiling UI file!
 ********************************************************************************/
 
-#ifndef WBALANCEHUOJGS_H
-#define WBALANCEHUOJGS_H
+#ifndef WBALANCEVQLYKF_H
+#define WBALANCEVQLYKF_H
 
 #include <QtCore/QVariant>
 #include <QtWidgets/QAction>
@@ -248,6 +248,7 @@ public:
     QLabel *labelFormula;
     QLabel *labelerrorresult;
     QLineEdit *lineEdit_b_person_8;
+    QPushButton *pushButton_inset;
     QMenuBar *menuBar;
     QMenu *menu;
     QMenu *menu_2;
@@ -782,10 +783,7 @@ public:
         palette25.setBrush(QPalette::Inactive, QPalette::ButtonText, brush4);
         palette25.setBrush(QPalette::Disabled, QPalette::ButtonText, brush2);
         pushButton_data_analy_save->setPalette(palette25);
-        QFont font5;
-        font5.setFamily(QString::fromUtf8("Agency FB"));
-        font5.setPointSize(11);
-        pushButton_data_analy_save->setFont(font5);
+        pushButton_data_analy_save->setFont(font);
         label_32 = new QLabel(page_3);
         label_32->setObjectName(QString::fromUtf8("label_32"));
         label_32->setGeometry(QRect(30, 210, 111, 31));
@@ -916,7 +914,7 @@ public:
         palette33.setBrush(QPalette::Inactive, QPalette::ButtonText, brush4);
         palette33.setBrush(QPalette::Disabled, QPalette::ButtonText, brush2);
         pushButton_coeff_save->setPalette(palette33);
-        pushButton_coeff_save->setFont(font5);
+        pushButton_coeff_save->setFont(font);
         pushButton_coeff_cal = new QPushButton(page_2);
         pushButton_coeff_cal->setObjectName(QString::fromUtf8("pushButton_coeff_cal"));
         pushButton_coeff_cal->setGeometry(QRect(530, 690, 90, 35));
@@ -955,10 +953,10 @@ public:
         progressBar_coffee = new QProgressBar(page_2);
         progressBar_coffee->setObjectName(QString::fromUtf8("progressBar_coffee"));
         progressBar_coffee->setGeometry(QRect(30, 660, 1241, 16));
-        QFont font6;
-        font6.setPointSize(11);
-        font6.setKerning(true);
-        progressBar_coffee->setFont(font6);
+        QFont font5;
+        font5.setPointSize(11);
+        font5.setKerning(true);
+        progressBar_coffee->setFont(font5);
         progressBar_coffee->setValue(0);
         progressBar_coffee->setTextVisible(true);
         progressBar_coffee->setTextDirection(QProgressBar::BottomToTop);
@@ -1115,7 +1113,10 @@ public:
         palette45.setBrush(QPalette::Disabled, QPalette::PlaceholderText, brush6);
 #endif
         groupBox_14->setPalette(palette45);
-        groupBox_14->setFont(font5);
+        QFont font6;
+        font6.setFamily(QString::fromUtf8("Agency FB"));
+        font6.setPointSize(11);
+        groupBox_14->setFont(font6);
         groupBox_14->setLayoutDirection(Qt::LeftToRight);
         groupBox_14->setAlignment(Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter);
         tableView_show_data00 = new QTableView(groupBox_14);
@@ -1248,7 +1249,7 @@ public:
         palette50.setBrush(QPalette::Disabled, QPalette::PlaceholderText, brush6);
 #endif
         groupBox_15->setPalette(palette50);
-        groupBox_15->setFont(font5);
+        groupBox_15->setFont(font6);
         groupBox_15->setLayoutDirection(Qt::LeftToRight);
         groupBox_15->setAlignment(Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter);
         tableView_show_load00 = new QTableView(groupBox_15);
@@ -1272,7 +1273,7 @@ public:
         palette51.setBrush(QPalette::Inactive, QPalette::ButtonText, brush4);
         palette51.setBrush(QPalette::Disabled, QPalette::ButtonText, brush2);
         pushButton_save00_result->setPalette(palette51);
-        pushButton_save00_result->setFont(font5);
+        pushButton_save00_result->setFont(font);
         label_134 = new QLabel(page_4);
         label_134->setObjectName(QString::fromUtf8("label_134"));
         label_134->setGeometry(QRect(1020, 40, 81, 31));
@@ -1321,7 +1322,7 @@ public:
         palette54.setBrush(QPalette::Inactive, QPalette::WindowText, brush4);
         palette54.setBrush(QPalette::Disabled, QPalette::WindowText, brush2);
         groupBox_29->setPalette(palette54);
-        groupBox_29->setFont(font5);
+        groupBox_29->setFont(font6);
         groupBox_29->setLayoutDirection(Qt::LeftToRight);
         groupBox_29->setAlignment(Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter);
         tableView_show00_result = new QTableView(groupBox_29);
@@ -1355,7 +1356,7 @@ public:
         palette57.setBrush(QPalette::Inactive, QPalette::WindowText, brush4);
         palette57.setBrush(QPalette::Disabled, QPalette::WindowText, brush2);
         groupBox_30->setPalette(palette57);
-        groupBox_30->setFont(font5);
+        groupBox_30->setFont(font6);
         groupBox_30->setLayoutDirection(Qt::LeftToRight);
         groupBox_30->setAlignment(Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter);
         tableView_show_data00_result = new QTableView(groupBox_30);
@@ -1410,7 +1411,7 @@ public:
         palette60.setBrush(QPalette::Inactive, QPalette::WindowText, brush4);
         palette60.setBrush(QPalette::Disabled, QPalette::WindowText, brush2);
         groupBox_10->setPalette(palette60);
-        groupBox_10->setFont(font5);
+        groupBox_10->setFont(font6);
         groupBox_10->setLayoutDirection(Qt::LeftToRight);
         groupBox_10->setAlignment(Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter);
         tableView_show_data01 = new QTableView(groupBox_10);
@@ -1488,7 +1489,7 @@ public:
         palette64.setBrush(QPalette::Inactive, QPalette::WindowText, brush4);
         palette64.setBrush(QPalette::Disabled, QPalette::WindowText, brush2);
         groupBox_11->setPalette(palette64);
-        groupBox_11->setFont(font5);
+        groupBox_11->setFont(font6);
         groupBox_11->setLayoutDirection(Qt::LeftToRight);
         groupBox_11->setAlignment(Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter);
         tableView_show_load01 = new QTableView(groupBox_11);
@@ -1575,7 +1576,7 @@ public:
         label_116->setFont(font);
         pushButton_show_data01_load01 = new QPushButton(page_5);
         pushButton_show_data01_load01->setObjectName(QString::fromUtf8("pushButton_show_data01_load01"));
-        pushButton_show_data01_load01->setGeometry(QRect(600, 690, 90, 31));
+        pushButton_show_data01_load01->setGeometry(QRect(600, 690, 90, 35));
         QPalette palette68;
         palette68.setBrush(QPalette::Active, QPalette::ButtonText, brush4);
         palette68.setBrush(QPalette::Inactive, QPalette::ButtonText, brush4);
@@ -1663,7 +1664,7 @@ public:
         palette74.setBrush(QPalette::Inactive, QPalette::WindowText, brush4);
         palette74.setBrush(QPalette::Disabled, QPalette::WindowText, brush2);
         groupBox_7->setPalette(palette74);
-        groupBox_7->setFont(font5);
+        groupBox_7->setFont(font6);
         groupBox_7->setLayoutDirection(Qt::LeftToRight);
         groupBox_7->setAlignment(Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter);
         tableView_iteration_out = new QTableView(groupBox_7);
@@ -1720,7 +1721,7 @@ public:
         palette78.setBrush(QPalette::Inactive, QPalette::ButtonText, brush4);
         palette78.setBrush(QPalette::Disabled, QPalette::ButtonText, brush2);
         pushButton_data_comprehen_save->setPalette(palette78);
-        pushButton_data_comprehen_save->setFont(font5);
+        pushButton_data_comprehen_save->setFont(font);
         checkBox_method1_2 = new QCheckBox(page_6);
         checkBox_method1_2->setObjectName(QString::fromUtf8("checkBox_method1_2"));
         checkBox_method1_2->setGeometry(QRect(30, 470, 631, 19));
@@ -1833,11 +1834,11 @@ public:
         lineEdit_b_name_8 = new QLineEdit(page_7);
         lineEdit_b_name_8->setObjectName(QString::fromUtf8("lineEdit_b_name_8"));
         lineEdit_b_name_8->setGeometry(QRect(370, 50, 150, 30));
-        lineEdit_b_name_8->setFont(font);
+        lineEdit_b_name_8->setFont(font2);
         label_b_type_8 = new QLabel(page_7);
         label_b_type_8->setObjectName(QString::fromUtf8("label_b_type_8"));
         label_b_type_8->setGeometry(QRect(30, 50, 81, 30));
-        label_b_type_8->setFont(font5);
+        label_b_type_8->setFont(font6);
         pushButton_choose_EV = new QPushButton(page_7);
         pushButton_choose_EV->setObjectName(QString::fromUtf8("pushButton_choose_EV"));
         pushButton_choose_EV->setGeometry(QRect(1180, 330, 91, 30));
@@ -1845,12 +1846,12 @@ public:
         lineEdit_SUEV_save_path = new QLineEdit(page_7);
         lineEdit_SUEV_save_path->setObjectName(QString::fromUtf8("lineEdit_SUEV_save_path"));
         lineEdit_SUEV_save_path->setGeometry(QRect(50, 400, 1091, 30));
-        lineEdit_SUEV_save_path->setFont(font);
+        lineEdit_SUEV_save_path->setFont(font2);
         lineEdit_SUEV_save_path->setReadOnly(true);
         lineEdit_UCLR_save_path = new QLineEdit(page_7);
         lineEdit_UCLR_save_path->setObjectName(QString::fromUtf8("lineEdit_UCLR_save_path"));
         lineEdit_UCLR_save_path->setGeometry(QRect(50, 510, 1091, 30));
-        lineEdit_UCLR_save_path->setFont(font);
+        lineEdit_UCLR_save_path->setFont(font2);
         lineEdit_UCLR_save_path->setReadOnly(true);
         pushButton_choose_SUEV = new QPushButton(page_7);
         pushButton_choose_SUEV->setObjectName(QString::fromUtf8("pushButton_choose_SUEV"));
@@ -1904,7 +1905,7 @@ public:
         lineEdit_EV_save_path = new QLineEdit(page_7);
         lineEdit_EV_save_path->setObjectName(QString::fromUtf8("lineEdit_EV_save_path"));
         lineEdit_EV_save_path->setGeometry(QRect(50, 330, 1091, 30));
-        lineEdit_EV_save_path->setFont(font);
+        lineEdit_EV_save_path->setFont(font2);
         lineEdit_EV_save_path->setReadOnly(true);
         label_b_name_8 = new QLabel(page_7);
         label_b_name_8->setObjectName(QString::fromUtf8("label_b_name_8"));
@@ -1913,11 +1914,11 @@ public:
         lineEdit_b_type_8 = new QLineEdit(page_7);
         lineEdit_b_type_8->setObjectName(QString::fromUtf8("lineEdit_b_type_8"));
         lineEdit_b_type_8->setGeometry(QRect(110, 50, 150, 30));
-        lineEdit_b_type_8->setFont(font);
+        lineEdit_b_type_8->setFont(font2);
         lineEdit_b_number_8 = new QLineEdit(page_7);
         lineEdit_b_number_8->setObjectName(QString::fromUtf8("lineEdit_b_number_8"));
         lineEdit_b_number_8->setGeometry(QRect(1070, 10, 200, 30));
-        lineEdit_b_number_8->setFont(font);
+        lineEdit_b_number_8->setFont(font2);
         lineEdit_b_number_8->setReadOnly(true);
         label_b_date_8 = new QLabel(page_7);
         label_b_date_8->setObjectName(QString::fromUtf8("label_b_date_8"));
@@ -1929,7 +1930,7 @@ public:
         labeloutput->setFont(font4);
         pushButton_report_save = new QPushButton(page_7);
         pushButton_report_save->setObjectName(QString::fromUtf8("pushButton_report_save"));
-        pushButton_report_save->setGeometry(QRect(590, 690, 111, 31));
+        pushButton_report_save->setGeometry(QRect(590, 680, 111, 41));
         QPalette palette86;
         palette86.setBrush(QPalette::Active, QPalette::ButtonText, brush7);
         palette86.setBrush(QPalette::Inactive, QPalette::ButtonText, brush7);
@@ -1951,7 +1952,7 @@ public:
         lineEdit_CLE_save_path = new QLineEdit(page_7);
         lineEdit_CLE_save_path->setObjectName(QString::fromUtf8("lineEdit_CLE_save_path"));
         lineEdit_CLE_save_path->setGeometry(QRect(50, 620, 1091, 31));
-        lineEdit_CLE_save_path->setFont(font);
+        lineEdit_CLE_save_path->setFont(font2);
         lineEdit_CLE_save_path->setReadOnly(true);
         pushButton_choose_UCLR = new QPushButton(page_7);
         pushButton_choose_UCLR->setObjectName(QString::fromUtf8("pushButton_choose_UCLR"));
@@ -1972,10 +1973,10 @@ public:
         pushButton_choose_CLE->setFont(font3);
         progressBar = new QProgressBar(page_7);
         progressBar->setObjectName(QString::fromUtf8("progressBar"));
-        progressBar->setGeometry(QRect(50, 660, 1221, 20));
-        progressBar->setFont(font6);
+        progressBar->setGeometry(QRect(50, 660, 1221, 8));
+        progressBar->setFont(font5);
         progressBar->setValue(30);
-        progressBar->setTextVisible(true);
+        progressBar->setTextVisible(false);
         progressBar->setTextDirection(QProgressBar::BottomToTop);
         label_b_number_8 = new QLabel(page_7);
         label_b_number_8->setObjectName(QString::fromUtf8("label_b_number_8"));
@@ -1984,7 +1985,7 @@ public:
         lineEdit_b_date_8 = new QLineEdit(page_7);
         lineEdit_b_date_8->setObjectName(QString::fromUtf8("lineEdit_b_date_8"));
         lineEdit_b_date_8->setGeometry(QRect(860, 50, 150, 30));
-        lineEdit_b_date_8->setFont(font);
+        lineEdit_b_date_8->setFont(font2);
         lineEdit_b_date_8->setCursorPosition(0);
         lineEdit_b_date_8->setAlignment(Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter);
         lineEdit_b_date_8->setReadOnly(false);
@@ -2000,7 +2001,7 @@ public:
         lineEdit_b_instru_8 = new QLineEdit(page_7);
         lineEdit_b_instru_8->setObjectName(QString::fromUtf8("lineEdit_b_instru_8"));
         lineEdit_b_instru_8->setGeometry(QRect(630, 50, 150, 30));
-        lineEdit_b_instru_8->setFont(font);
+        lineEdit_b_instru_8->setFont(font2);
         labelFormula = new QLabel(page_7);
         labelFormula->setObjectName(QString::fromUtf8("labelFormula"));
         labelFormula->setGeometry(QRect(30, 260, 571, 41));
@@ -2017,7 +2018,11 @@ public:
         lineEdit_b_person_8 = new QLineEdit(page_7);
         lineEdit_b_person_8->setObjectName(QString::fromUtf8("lineEdit_b_person_8"));
         lineEdit_b_person_8->setGeometry(QRect(1120, 50, 150, 30));
-        lineEdit_b_person_8->setFont(font);
+        lineEdit_b_person_8->setFont(font2);
+        pushButton_inset = new QPushButton(page_7);
+        pushButton_inset->setObjectName(QString::fromUtf8("pushButton_inset"));
+        pushButton_inset->setGeometry(QRect(1180, 90, 91, 30));
+        pushButton_inset->setFont(font3);
         stackedWidget->addWidget(page_7);
         WBalanceClass->setCentralWidget(centralWidget);
         menuBar = new QMenuBar(WBalanceClass);
@@ -2102,7 +2107,7 @@ public:
         QObject::connect(pushButton_coeff_cal, SIGNAL(clicked()), WBalanceClass, SLOT(coeff_evaluate()));
         QObject::connect(pushButton_read_load_00, SIGNAL(clicked()), WBalanceClass, SLOT(show_load00()));
 
-        stackedWidget->setCurrentIndex(3);
+        stackedWidget->setCurrentIndex(7);
 
 
         QMetaObject::connectSlotsByName(WBalanceClass);
@@ -2252,7 +2257,7 @@ public:
         lineEdit_b_type_6->setInputMask(QString());
         lineEdit_b_type_6->setText(QString());
         pushButton_read_data01->setText(QCoreApplication::translate("WBalanceClass", "\350\257\273\345\217\226\346\226\207\344\273\266", nullptr));
-        label_115->setText(QCoreApplication::translate("WBalanceClass", ">> \347\273\274\345\220\210\345\212\240\350\275\275\350\257\257\345\267\256\350\257\204\344\274\260\342\200\224\346\225\260\346\215\256\345\210\206\346\236\220", nullptr));
+        label_115->setText(QCoreApplication::translate("WBalanceClass", ">> \347\273\274\345\220\210\345\212\240\350\275\275\350\257\257\345\267\256\350\257\204\344\274\260\342\200\224\346\225\260\346\215\256\350\257\273\345\217\226", nullptr));
         label_117->setText(QCoreApplication::translate("WBalanceClass", "\344\273\252\345\231\250\350\256\276\345\244\207\357\274\232", nullptr));
         label_75->setText(QCoreApplication::translate("WBalanceClass", "\344\270\215\345\220\214\345\267\245\345\206\265\345\212\240\350\275\275\347\224\265\345\216\213\346\225\260\346\215\256\346\226\207\344\273\266\350\267\257\345\276\204\357\274\232", nullptr));
         groupBox_11->setTitle(QCoreApplication::translate("WBalanceClass", "\350\275\275\350\215\267\346\225\260\346\215\256", nullptr));
@@ -2295,10 +2300,10 @@ public:
         labelgujizhi_uncertainty->setText(QCoreApplication::translate("WBalanceClass", "\346\250\241\345\236\213\347\263\273\346\225\260\344\274\260\350\256\241\345\200\274\346\240\207\345\207\206\344\270\215\347\241\256\345\256\232\345\272\246\346\226\207\344\273\266\344\277\235\345\255\230\350\267\257\345\276\204\357\274\232", nullptr));
         lineEdit_b_name_8->setText(QString());
         label_b_type_8->setText(QCoreApplication::translate("WBalanceClass", "\345\244\251\345\271\263\347\261\273\345\236\213\357\274\232", nullptr));
-        pushButton_choose_EV->setText(QCoreApplication::translate("WBalanceClass", "\345\217\246\351\200\211\346\226\207\344\273\266", nullptr));
+        pushButton_choose_EV->setText(QCoreApplication::translate("WBalanceClass", "\345\217\246\351\200\211", nullptr));
         lineEdit_SUEV_save_path->setText(QString());
         lineEdit_UCLR_save_path->setText(QString());
-        pushButton_choose_SUEV->setText(QCoreApplication::translate("WBalanceClass", "\345\217\246\351\200\211\346\226\207\344\273\266", nullptr));
+        pushButton_choose_SUEV->setText(QCoreApplication::translate("WBalanceClass", "\345\217\246\351\200\211", nullptr));
         labelCL->setText(QCoreApplication::translate("WBalanceClass", "\344\270\211.\345\244\251\345\271\263\351\235\231\346\240\241\347\273\274\345\220\210\345\212\240\350\275\275\351\207\215\345\244\215\346\200\247\350\257\204\344\274\260\347\273\223\346\236\234\357\274\210N\343\200\201N.m\357\274\211", nullptr));
 
         const bool __sortingEnabled = TableWidget_b->isSortingEnabled();
@@ -2317,15 +2322,16 @@ public:
         labelchongfuxing_uncertainty->setText(QCoreApplication::translate("WBalanceClass", "\347\273\274\345\220\210\345\212\240\350\275\275\351\207\215\345\244\215\346\200\247\344\270\215\347\241\256\345\256\232\345\272\246\346\226\207\344\273\266\344\277\235\345\255\230\350\267\257\345\276\204\357\274\232", nullptr));
         label_b_instru_8->setText(QCoreApplication::translate("WBalanceClass", "\344\273\252\345\231\250\350\256\276\345\244\207\357\274\232", nullptr));
         lineEdit_CLE_save_path->setText(QString());
-        pushButton_choose_UCLR->setText(QCoreApplication::translate("WBalanceClass", "\345\217\246\351\200\211\346\226\207\344\273\266", nullptr));
+        pushButton_choose_UCLR->setText(QCoreApplication::translate("WBalanceClass", "\345\217\246\351\200\211", nullptr));
         labelCLError->setText(QCoreApplication::translate("WBalanceClass", "\345\233\233\343\200\201\345\244\251\345\271\263\351\235\231\346\240\241\347\273\274\345\220\210\345\212\240\350\275\275\350\257\257\345\267\256\350\257\204\344\274\260\347\273\223\346\236\234", nullptr));
-        pushButton_choose_CLE->setText(QCoreApplication::translate("WBalanceClass", "\345\217\246\351\200\211\346\226\207\344\273\266", nullptr));
+        pushButton_choose_CLE->setText(QCoreApplication::translate("WBalanceClass", "\345\217\246\351\200\211", nullptr));
         label_b_number_8->setText(QCoreApplication::translate("WBalanceClass", "\347\274\226\345\217\267\357\274\232", nullptr));
         lineEdit_b_date_8->setText(QString());
         labelgujizhi->setText(QCoreApplication::translate("WBalanceClass", "\346\250\241\345\236\213\347\263\273\346\225\260\344\274\260\350\256\241\345\200\274\346\226\207\344\273\266\344\277\235\345\255\230\350\267\257\345\276\204\357\274\232", nullptr));
         labelFormula->setText(QCoreApplication::translate("WBalanceClass", "\344\272\214\357\274\216\345\244\251\345\271\263\351\235\231\346\240\241\345\205\254\345\274\217\357\274\210\344\275\223\350\275\264\347\263\273\343\200\201\345\244\232\345\205\203\346\240\241\343\200\201N\343\200\201N.m\343\200\201mV/V\357\274\211", nullptr));
         labelerrorresult->setText(QCoreApplication::translate("WBalanceClass", "\347\273\274\345\220\210\345\212\240\350\275\275\350\257\257\345\267\256\350\257\204\344\274\260\347\273\223\346\236\234\346\226\207\344\273\266\344\277\235\345\255\230\350\267\257\345\276\204:", nullptr));
         lineEdit_b_person_8->setText(QString());
+        pushButton_inset->setText(QCoreApplication::translate("WBalanceClass", "\345\257\274\345\205\245\346\225\260\346\215\256", nullptr));
         menu->setTitle(QCoreApplication::translate("WBalanceClass", "\346\240\241\345\207\206\346\250\241\345\236\213\347\263\273\346\225\260\350\257\204\344\274\260", nullptr));
         menu_2->setTitle(QCoreApplication::translate("WBalanceClass", "\347\273\274\345\220\210\345\212\240\350\275\275\351\207\215\345\244\215\346\200\247\350\257\204\344\274\260", nullptr));
         menu_3->setTitle(QCoreApplication::translate("WBalanceClass", "\347\273\274\345\220\210\345\212\240\350\275\275\350\257\257\345\267\256\350\257\204\344\274\260", nullptr));
@@ -2341,4 +2347,4 @@ namespace Ui {
 
 QT_END_NAMESPACE
 
-#endif // WBALANCEHUOJGS_H
+#endif // WBALANCEVQLYKF_H
