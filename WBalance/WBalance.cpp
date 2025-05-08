@@ -1996,7 +1996,7 @@ void WBalance::compute_comprehen()
 		{
 			for (int col = 0; col < result_66.cols(); ++col)
 			{
-				QStandardItem* item2 = new QStandardItem(QString::number(result_66(row, col)));
+				QString col_header = header[col]; //获取当前列的表头名称
 				model2->setItem(row, col, item2);
 			}
 		}
