@@ -55,7 +55,7 @@ public:
     void show_data(const QStringList &header, const MatrixXd &matri, QTableView *tableView); //表格显示数据
 
     MatrixXd read_tableview(QTableView *tableView); //读取表格数据
-    QPair<bool, vector<vector<int>>> find_zeroRows_index(const QString &glistFilePath);           //搜索加载表中的零行
+    QPair<bool, vector<vector<int>>> find_zeroRows_index(const QString &glistFilePath); //搜索加载表中的零行
     void save_calibra_result(const QString &Path); //保存校准中间结果
 
     //系数评估，从144*12每一个数据的分布中抽样
@@ -63,13 +63,15 @@ public:
     vector<MatrixXd> load_sample_result;     //载荷抽样结果，M*144*6
     MatrixXd coeff_average;                  //估计值，27*6
     MatrixXd coeff_error;                    //不确定度，27*6
+    bool coeff_eva_falg;                     //系数评估状态
     bool exit_flag;
 
     void initThread();
+    bool hasInfiniteData(QTableView* tableView);
     bool save_coeff_file(const QString& path, QTableView *tableView, const QString& title, const QStringList& headers);
 
     QString read_data00(QLineEdit* LineEdit);
-    double ThirdRule(double data);
+    double ThirdRule(double data, int sigFigs);
 
     void read_load01_data();
     void read_data01_data();
@@ -118,12 +120,10 @@ private slots:
     void save_calibration();      //保存校准结果
 
     void show_data00();           //重复性-读取data00文件
-    void show_load00();           //重复性-读取load00文件
-
     void compute_repeat_result(); //重复性-评估
     void save_comprehen_cfx();    //重复性-结果保存
 
+    void insetTechnicalData();    //导入技术数据
     void btnSaveClicked();        //输出报告
-    void insetTechnicalData();    //导入有关技术数据
 };
 
